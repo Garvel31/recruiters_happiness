@@ -35,31 +35,41 @@ public class ProjectController {
     public Object showJson(@RequestParam(required = false) Long id) {
         if (id != null) {
             Project project = projectService.showProjectById(id);
-            return modelMapper.map(project, ProjectDTO.class);
+            return entityToDtoConv(project);
         } else {
             LinkedList<Project> projectList = new LinkedList<>(projectService.showAllProject());
             LinkedList<ProjectDTO> projectDTOList = new LinkedList<>();
-            projectList.forEach(project -> projectDTOList.add(modelMapper.map(project, ProjectDTO.class)));
+            projectList.forEach(project -> projectDTOList.add(entityToDtoConv(project)));
             return projectDTOList;
         }
 
-//        return id == null
-//                ? (projectService.showAllProject())
-//                : (projectService.showProjectById(id));
+
     }
 
     @PostMapping(value = "create", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object addProject(@RequestBody(required = false) @Valid ProjectDTO body, BindingResult bindingResult) {
-            Project newProject = modelMapper.map(body, Project.class);
+            Project newProject = DtoToEntityConv(body);
 
             LinkedList<Technology> technologyLinkedList = new LinkedList<>();
             technologyLinkedList.addAll(newProject.getTechnology());
 
         if(!bindingResult.hasErrors())
-            return projectService.addProject(newProject.getProject_name(), newProject.getProj_stage(), newProject.isGost_doc(), newProject.getEnd_terms(), technologyLinkedList);
+            return projectService.addProject(newProject.getProject_name(), newProject.getProj_stage(), newProject.isGost_doc(),
+                    newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
+                    newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getProjectCardStats(), newProject.getStakeholder_number(),
+                    technologyLinkedList, newProject.getTeamInfo(), newProject.getProjectType(), newProject.getWorkingConditions());
         else
             return "переданы не верные данные по объекту Project";
     }
 
+
+
+    private ProjectDTO entityToDtoConv(Project project){
+        return modelMapper.map(project, ProjectDTO.class);
+    }
+
+    private Project DtoToEntityConv(ProjectDTO projectDto){
+        return modelMapper.map(projectDto, Project.class);
+    }
 
 }

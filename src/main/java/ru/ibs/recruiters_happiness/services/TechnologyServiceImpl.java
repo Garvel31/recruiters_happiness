@@ -12,9 +12,6 @@ public class TechnologyServiceImpl implements TechnologyService {
     @Autowired
     TechnologyRepository technologyRepository;
 
-    public TechnologyServiceImpl(TechnologyRepository technologyRepository) {
-        this.technologyRepository = technologyRepository;
-    }
 
     @Override
     public Technology addTechnology(String technologyType) {
@@ -22,4 +19,6 @@ public class TechnologyServiceImpl implements TechnologyService {
 
         return technologyRepository.save(newTechnology);
     }
+
+
 }

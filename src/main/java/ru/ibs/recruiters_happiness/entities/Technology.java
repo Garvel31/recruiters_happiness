@@ -25,12 +25,13 @@ public class Technology {
 
     private String technologyType;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "technology")
+    @ManyToOne
+    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
     @JsonIgnore
-    List<Project> project;
+    private Project project;
 
     public Technology(String technologyType){
         this.technologyType = technologyType;
-        this.project = new LinkedList<>();
+
     }
 }

@@ -4,7 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.ibs.recruiters_happiness.entities.ProjectType;
+import ru.ibs.recruiters_happiness.entities.TeamInfo;
 import ru.ibs.recruiters_happiness.entities.Technology;
+import ru.ibs.recruiters_happiness.entities.WorkingConditions;
 
 import javax.persistence.CascadeType;
 import javax.persistence.ManyToMany;
@@ -16,7 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectDTO {
 
-    private long id;
 
     @NotNull
     private String project_name;
@@ -32,10 +34,14 @@ public class ProjectDTO {
     private String end_terms;
 
 
-    private String func_direction, subject_area, description, problem_to_solve;
+    private String func_direction, subject_area, description, problem_to_solve, projectAuthor, projectCardStats;
     private int stakeholder_number;
 
 
     private List<Technology> technology;
+
+    private TeamInfo teamInfo;
+    private ProjectType projectType;
+    private WorkingConditions workingConditions;
 
 }

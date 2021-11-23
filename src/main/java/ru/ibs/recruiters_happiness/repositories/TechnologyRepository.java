@@ -9,5 +9,7 @@ import java.util.List;
 public interface TechnologyRepository extends CrudRepository<Technology, Long> {
 
     List<Technology> findAll();
+    List<Technology> findTechnologyByProjectId(Long projectId);
+    List<Technology> findGearById(Long id);
 
 }
