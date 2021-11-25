@@ -32,15 +32,38 @@ public class ProjectServiceImpl implements ProjectService {
     public Project addProject(ProjectDTO projectDTO) {
 
         final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
+//        if(newProject.isDraft())
+//            projectRepository.deleteById(newProject.getId());
         newProject.getTeamInfo().setProject(newProject);
         newProject.getProjectType().setProject(newProject);
         newProject.getWorkingConditions().setProject(newProject);
+        newProject.setActive(true);
 ////        technologyList.forEach(technology -> {
 ////            technology.setProject(newProject);
 ////            newProject.getTechnology().add(technology);
 ////        });
         return projectRepository.save(newProject);
     }
+
+//Черновик
+//    public Project addProjectDraft(ProjectDTO projectDTO) {
+//        final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
+//
+//        if (projectRepository.findProjectByDraftIsTrue() == null) {
+//            newProject.setDraft(true);
+//            newProject.getTeamInfo().setProject(newProject);
+//            newProject.getProjectType().setProject(newProject);
+//            newProject.getWorkingConditions().setProject(newProject);
+//        } else {
+//            projectRepository.deleteById(projectRepository.findProjectByDraftIsTrue().getId());
+//            newProject.setDraft(true);
+//            newProject.getTeamInfo().setProject(newProject);
+//            newProject.getProjectType().setProject(newProject);
+//            newProject.getWorkingConditions().setProject(newProject);
+//        }
+
+//        return projectRepository.save(newProject);
+//    }
 
 
     public Project updateProject(Long id, ProjectDTO projectDTO) {
@@ -58,13 +81,24 @@ public class ProjectServiceImpl implements ProjectService {
         newProject.setProjectAuthor(project.getProjectAuthor());
         newProject.setStakeholder_number(project.getStakeholder_number());
         newProject.setTechnology(project.getTechnology());
-
         return projectRepository.save(newProject);
     }
 
 
     public void deleteProject(Long id) {
         projectRepository.deleteById(id);
+    }
+
+    public void moveProjectToArchive (Long id) {
+        Project newProject = projectRepository.findProjectById(id);
+        newProject.setActive(false);
+        projectRepository.save(newProject);
+    }
+
+    public void moveProjectFromArchive (Long id) {
+        Project newProject = projectRepository.findProjectById(id);
+        newProject.setActive(true);
+        projectRepository.save(newProject);
     }
 
     //показываем карточку по id
@@ -79,13 +113,19 @@ public class ProjectServiceImpl implements ProjectService {
 
     //показываем все карточи в сокращенном формате
     public List<ProjectInfoPageDTO> showAllProjectInfo() {
-        return MapperUtil.convertList(projectRepository.findAll(), this::entityToAllProjDtoConv);
+        return MapperUtil.convertList(projectRepository.findAllByActiveIsTrue(), this::entityToAllProjDtoConv);
+    }
+
+    //показываем все карточи в сокращенном формате
+    public List<ProjectInfoPageDTO> showAllArchiveProjectInfo() {
+        return MapperUtil.convertList(projectRepository.findAllByActiveIsFalse(), this::entityToAllProjDtoConv);
     }
 
     //показываем все карточи в сокращенном формате
     public List<ProjectInfoPageDTO> showAllProjectInfoSortBy(String sortType) {
         return MapperUtil.convertList(SortBy(sortType), this::entityToAllProjDtoConv);
     }
+
     //показы
     // ваем все карточи в сокращенном формате
     public List<ProjectInfoPageDTO> showAllProjectInfoFilteredByCustomer(String customer) {
@@ -96,6 +136,10 @@ public class ProjectServiceImpl implements ProjectService {
     //метод для сортировки
     public List<Project> SortBy(String sortType) {
         return projectRepository.findAll(Sort.by(Sort.Direction.ASC, sortType));
+    }
+
+    public Project FindDraft() {
+        return projectRepository.findProjectByDraftIsTrue();
     }
 
     //метод для сортировки

@@ -47,8 +47,8 @@ public class ProjectDTO {
     private String func_direction, subject_area, description, problem_to_solve, projectAuthor, technology;
     private int stakeholder_number;
 
-    private boolean isActive;
-    private boolean isDraft;
+    private boolean active;
+    private boolean draft;
 //    private Technology technology;
 
     private TeamInfo teamInfo;

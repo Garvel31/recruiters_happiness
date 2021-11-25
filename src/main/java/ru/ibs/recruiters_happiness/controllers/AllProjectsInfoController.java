@@ -47,8 +47,13 @@ public class AllProjectsInfoController {
     //выводим все проекты со всеми полями
     @GetMapping(value = "allprojects",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTO(){
-//        List<Project> projects = projectService.showAllProjectInfo();
         return projectService.showAllProjectInfo();
+    }
+
+    //выводим все проекты со всеми полями
+    @GetMapping(value = "allprojects/archive",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProjectInfoPageDTO> showArchiveProjectDTO(){
+        return projectService.showAllArchiveProjectInfo();
     }
 
     @GetMapping(value = "allprojects/sortby/{sortType}",  produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,9 +67,9 @@ public class AllProjectsInfoController {
     }
 
 
-    //метод для мапинга всех карточек проекта в ДТО который передает только основные поля
-    private ProjectInfoPageDTO entityToAllProjDtoConv(Project project) {
-        return modelMapper.map(project, ProjectInfoPageDTO.class);
-    }
+//    //метод для мапинга всех карточек проекта в ДТО который передает только основные поля
+//    private ProjectInfoPageDTO entityToAllProjDtoConv(Project project) {
+//        return modelMapper.map(project, ProjectInfoPageDTO.class);
+//    }
 
 }

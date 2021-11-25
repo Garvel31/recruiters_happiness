@@ -64,8 +64,8 @@ public class CreateUpdateProjectController {
 //            projectList.forEach(project -> projectDTOList.add(entityToDtoConv(project)));
             return projectService.showAllProject();
         }
-
     }
+
 
     @PostMapping(value = "create", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object addProject(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
@@ -76,19 +76,20 @@ public class CreateUpdateProjectController {
         return projectService.addProject(projectDTO);
     }
 
+
     @PostMapping(value = "update", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateProject(@RequestParam(required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO projectDTO) {
-        Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
-//        LinkedList<Technology> technologyLinkedList = new LinkedList<>();
-//        technologyLinkedList.addAll(newProject.getTechnology());
-//        projectService.updateProject(id, newProject.getProject_name(), newProject.getCustomer(), newProject.getProj_stage(), newProject.isGost_doc(),
-//                newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
-//                newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getStakeholder_number(),
-//                newProject.getTechnology());
+//        Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
+////        LinkedList<Technology> technologyLinkedList = new LinkedList<>();
+////        technologyLinkedList.addAll(newProject.getTechnology());
+////        projectService.updateProject(id, newProject.getProject_name(), newProject.getCustomer(), newProject.getProj_stage(), newProject.isGost_doc(),
+////                newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
+////                newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getStakeholder_number(),
+////                newProject.getTechnology());
         projectService.updateProject(id, projectDTO);
         projectTypeService.updateProjectType(id, projectDTO);
         teamService.updateTeamInfo(id, projectDTO);
-        workingConditionsService.updateWorkingConditions(id,projectDTO);
+        workingConditionsService.updateWorkingConditions(id, projectDTO);
 
     }
 
@@ -97,6 +98,38 @@ public class CreateUpdateProjectController {
         projectService.deleteProject(id);
     }
 
+    @PostMapping(value = "movetoarchive")
+    public void moveProjectToArchive(@RequestParam(required = true) Long id) {
+        projectService.moveProjectToArchive(id);
+    }
+
+    @PostMapping(value = "movefromarchive")
+    public void moveProjectFromArchive(@RequestParam(required = true) Long id) {
+        projectService.moveProjectFromArchive(id);
+    }
+
+    //Черновик
+//    @GetMapping(value = "readdraft", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public Object showProjectsDraft() {
+//        if (projectService.FindDraft() == null) {
+//            return "";
+//        } else {
+////            LinkedList<Project> projectList = new LinkedList<>();
+////            LinkedList<ProjectDTO> projectDTOList = new LinkedList<>();
+////            projectList.forEach(project -> projectDTOList.add(entityToDtoConv(project)));
+//            return projectService.FindDraft();
+//        }
+//    }
+
+    //Создание черновика (в сервисе проверяем, если уже есть черновик переписываем его)
+//    @PostMapping(value = "create/draft", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+//    public Object addProjectDraft(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
+////        Project newProject = DtoToEntityConv(body);
+////        LinkedList<Technology> technologyLinkedList = new LinkedList<>();
+////        technologyLinkedList.addAll(newProject.getTechnology());
+////
+//        return projectService.addProjectDraft(projectDTO);
+//    }
 
 
     private ProjectDTO entityToDtoConv(Project project) {

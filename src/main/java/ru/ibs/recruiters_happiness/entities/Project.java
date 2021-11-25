@@ -50,19 +50,19 @@ public class Project {
         setUpdated(LocalDateTime.now());
     }
 
-    @NotNull
+
     private String project_name;
 
-    @NotNull
+
     private String customer;
 
-    @NotNull
+
     private String proj_stage;
 
 
     private boolean gost_doc;
-    private boolean isActive = true;
-    private boolean isDraft = false;
+    private boolean active = true;
+    private boolean draft = false;
 
     @NotNull
     @DateTimeFormat(pattern = "dd-MM-yyyy")

@@ -26,7 +26,7 @@ public class ProjectTypeServiceImpl implements ProjectTypeService {
         return projectTypeRepository.save(projectType);
     }
 
-//    public ProjectType updateProjectType(Long projectid, boolean isPayType, boolean isPO, boolean isMVP, boolean isFromScratch) {
+
 public ProjectType updateProjectType(Long projectid, ProjectDTO projectDTO) {
             Project project = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
             ProjectType projectType = projectTypeRepository.findProjectTypeByProjectId(projectid);
