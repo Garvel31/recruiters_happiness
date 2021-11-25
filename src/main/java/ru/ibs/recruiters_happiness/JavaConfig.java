@@ -60,10 +60,7 @@ public class JavaConfig {
         return transactionManager;
     }
 
-    @Bean
-    public ModelMapper getMapper() {
-        return new ModelMapper();
-    }
+
 
 
 

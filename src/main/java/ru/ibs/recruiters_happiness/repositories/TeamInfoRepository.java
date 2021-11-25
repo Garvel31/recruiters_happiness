@@ -5,4 +5,6 @@ import ru.ibs.recruiters_happiness.entities.TeamInfo;
 
 public interface TeamInfoRepository extends CrudRepository<TeamInfo, Long> {
 
+    TeamInfo findTeamInfoByProjectId(Long projId);
+
 }

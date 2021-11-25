@@ -5,4 +5,6 @@ import ru.ibs.recruiters_happiness.entities.WorkingConditions;
 
 public interface WorkingConditionsRepository extends CrudRepository<WorkingConditions, Long> {
 
+    WorkingConditions findByProjectId(Long projId);
+
 }

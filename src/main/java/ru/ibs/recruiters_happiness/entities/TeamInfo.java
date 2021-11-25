@@ -1,13 +1,12 @@
 package ru.ibs.recruiters_happiness.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
@@ -26,6 +25,10 @@ public class TeamInfo {
 
     private int analiticsCount, devsCount, testerCount, techpisCount, allTeamCount;
 
+    @OneToOne
+    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
+    @JsonIgnore
+    private Project project;
 
     public TeamInfo(String devMetodology, boolean isProductDev, boolean isTeamFormed, int analiticsCount, int devsCount, int testerCount,
                     int techpisCount, int allTeamCount) {

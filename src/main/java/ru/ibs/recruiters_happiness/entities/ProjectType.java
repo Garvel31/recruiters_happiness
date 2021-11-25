@@ -1,20 +1,17 @@
 package ru.ibs.recruiters_happiness.entities;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
+@Getter
 public class ProjectType {
 
     @Id
@@ -26,10 +23,17 @@ public class ProjectType {
     private boolean isMVP;
     private boolean isFromScratch;
 
+    @OneToOne
+    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
+    @JsonIgnore
+    private Project project;
+
     public ProjectType(boolean isPayType, boolean isPO, boolean isMVP, boolean isFromScratch) {
         this.isPayType = isPayType;
         this.isPO = isPO;
         this.isMVP = isMVP;
         this.isFromScratch = isFromScratch;
     }
+
+
 }

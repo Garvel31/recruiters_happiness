@@ -5,11 +5,11 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import ru.ibs.recruiters_happiness.entities.ProjectType;
 import ru.ibs.recruiters_happiness.entities.TeamInfo;
-import ru.ibs.recruiters_happiness.entities.Technology;
+
 import ru.ibs.recruiters_happiness.entities.WorkingConditions;
-import ru.ibs.recruiters_happiness.repositories.TechnologyRepository;
+
 import ru.ibs.recruiters_happiness.services.ProjectServiceImpl;
-import ru.ibs.recruiters_happiness.services.TechnologyServiceImpl;
+
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -23,11 +23,11 @@ public class RecruitersHappinessApplication {
     @Autowired
     ProjectServiceImpl projectService;
 
-    @Autowired
-    TechnologyServiceImpl technologyService;
-
-    @Autowired
-    TechnologyRepository technologyRepository;
+//    @Autowired
+//    TechnologyServiceImpl technologyService;
+//
+//    @Autowired
+//    TechnologyRepository technologyRepository;
 
 
     @PostConstruct
