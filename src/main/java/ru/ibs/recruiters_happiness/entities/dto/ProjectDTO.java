@@ -21,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectDTO {
 
+    private Long id;
 
     @NotNull
     private String project_name;

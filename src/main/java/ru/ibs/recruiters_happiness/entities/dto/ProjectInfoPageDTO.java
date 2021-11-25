@@ -14,6 +14,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProjectInfoPageDTO {
 
+    private Long id;
+
     @NotNull
     private String customer;
 

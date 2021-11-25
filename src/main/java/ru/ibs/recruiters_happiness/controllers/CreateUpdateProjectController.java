@@ -26,7 +26,7 @@ import java.util.List;
 
 @EnableAutoConfiguration
 @RestController
-@RequestMapping(value = "/hrdream", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/hrdream/projectcard", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CreateUpdateProjectController {
 
     @Autowired
@@ -57,48 +57,38 @@ public class CreateUpdateProjectController {
     @GetMapping(value = "read", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object showProjects(@RequestParam(required = false) Long id) {
         if (id != null) {
-            Project project = projectService.showProjectById(id);
-            return entityToDtoConv(project);
+            return projectService.showProjectById(id);
         } else {
-            LinkedList<Project> projectList = new LinkedList<>(projectService.showAllProject());
-            LinkedList<ProjectDTO> projectDTOList = new LinkedList<>();
-            projectList.forEach(project -> projectDTOList.add(entityToDtoConv(project)));
-            return projectDTOList;
+//            LinkedList<Project> projectList = new LinkedList<>();
+//            LinkedList<ProjectDTO> projectDTOList = new LinkedList<>();
+//            projectList.forEach(project -> projectDTOList.add(entityToDtoConv(project)));
+            return projectService.showAllProject();
         }
 
     }
 
     @PostMapping(value = "create", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object addProject(@RequestBody(required = false) @Valid ProjectDTO body) {
-        Project newProject = DtoToEntityConv(body);
+    public Object addProject(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
+//        Project newProject = DtoToEntityConv(body);
 //        LinkedList<Technology> technologyLinkedList = new LinkedList<>();
 //        technologyLinkedList.addAll(newProject.getTechnology());
-        return projectService.addProject(newProject.getProject_name(), newProject.getCustomer(), newProject.getProj_stage(), newProject.isGost_doc(),
-                newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
-                newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getStakeholder_number(),
-                newProject.getTechnology(), newProject.getTeamInfo(), newProject.getProjectType(), newProject.getWorkingConditions());
+//
+        return projectService.addProject(projectDTO);
     }
 
     @PostMapping(value = "update", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateProject(@RequestParam(required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO body) {
-        Project newProject = DtoToEntityConv(body);
+    public void updateProject(@RequestParam(required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO projectDTO) {
+        Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
 //        LinkedList<Technology> technologyLinkedList = new LinkedList<>();
 //        technologyLinkedList.addAll(newProject.getTechnology());
-        projectService.updateProject(id, newProject.getProject_name(), newProject.getCustomer(), newProject.getProj_stage(), newProject.isGost_doc(),
-                newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
-                newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getStakeholder_number(),
-                newProject.getTechnology());
-
-        projectTypeService.updateProjectType(id, newProject.getProjectType().isPayType(), newProject.getProjectType().isPO(),
-                newProject.getProjectType().isMVP(), newProject.getProjectType().isFromScratch());
-
-        teamService.updateTeamInfo(id, newProject.getTeamInfo().isProductDev(), newProject.getTeamInfo().isTeamFormed(),
-                newProject.getTeamInfo().getAnaliticsCount(), newProject.getTeamInfo().getDevsCount(), newProject.getTeamInfo().getTesterCount(),
-                newProject.getTeamInfo().getTechpisCount(), newProject.getTeamInfo().getAllTeamCount());
-
-        workingConditionsService.updateWorkingConditions(id, newProject.getWorkingConditions().isInOffice(),
-                newProject.getWorkingConditions().isTimeLag(), newProject.getWorkingConditions().isOverTimeExpect(),
-                newProject.getWorkingConditions().getLagOfTime(), newProject.getWorkingConditions().getProcedure());
+//        projectService.updateProject(id, newProject.getProject_name(), newProject.getCustomer(), newProject.getProj_stage(), newProject.isGost_doc(),
+//                newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
+//                newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getStakeholder_number(),
+//                newProject.getTechnology());
+        projectService.updateProject(id, projectDTO);
+        projectTypeService.updateProjectType(id, projectDTO);
+        teamService.updateTeamInfo(id, projectDTO);
+        workingConditionsService.updateWorkingConditions(id,projectDTO);
 
     }
 
@@ -107,21 +97,7 @@ public class CreateUpdateProjectController {
         projectService.deleteProject(id);
     }
 
-    @GetMapping("allprojects")
-    private List<ProjectInfoPageDTO> readDTOCard(){
-        List<Project> tables = projectService.showAllProject();
-        return MapperUtil.convertList(tables, this::entityToAllProjDtoConv);
-    }
 
-    @GetMapping("allprojects/sort/bycustomer")
-    private List<ProjectInfoPageDTO> readDTOCardSortByCustomer(){
-        List<Project> tables = projectService.showAllProjectInfoSortByCustomer();
-        return MapperUtil.convertList(tables, this::entityToAllProjDtoConv);
-    }
-
-    private ProjectInfoPageDTO entityToAllProjDtoConv(Project project) {
-        return modelMapper.map(project, ProjectInfoPageDTO.class);
-    }
 
     private ProjectDTO entityToDtoConv(Project project) {
         return modelMapper.map(project, ProjectDTO.class);
