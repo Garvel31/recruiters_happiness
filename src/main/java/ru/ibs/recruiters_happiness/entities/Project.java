@@ -52,11 +52,7 @@ public class Project {
 
 
     private String project_name;
-
-
     private String customer;
-
-
     private String proj_stage;
 
 
@@ -71,9 +67,6 @@ public class Project {
 
     private String func_direction, subject_area, description, problem_to_solve, projectAuthor, technology;
     private int stakeholder_number;
-
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-//    private List<Technology> technology;
 
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -100,7 +93,7 @@ public class Project {
         this.projectAuthor = projectAuthor;
         this.stakeholder_number = stakeholder_number;
         this.technology = technology;
-//        this.technology = new LinkedList<>();
+
 
     }
 }

@@ -49,7 +49,7 @@ public class ProjectDTO {
 
     private boolean active;
     private boolean draft;
-//    private Technology technology;
+
 
     private TeamInfo teamInfo;
     private ProjectType projectType;

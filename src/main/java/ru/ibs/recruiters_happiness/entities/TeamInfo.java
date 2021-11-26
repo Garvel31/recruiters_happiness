@@ -21,25 +21,29 @@ public class TeamInfo {
 
     private String devMetodology;
 
-    private boolean isProductDev, isTeamFormed;
+    private boolean ProductDev, TeamFormed;
 
-    private int analiticsCount, devsCount, testerCount, techpisCount, allTeamCount;
+    private int analiticsNumber, devsNumber, testerNumber, techpisNumber, designerNumber, frontNumber, backNumber, fullstackNumber, allTeamNumber;
 
     @OneToOne
     @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
     @JsonIgnore
     private Project project;
 
-    public TeamInfo(String devMetodology, boolean isProductDev, boolean isTeamFormed, int analiticsCount, int devsCount, int testerCount,
-                    int techpisCount, int allTeamCount) {
-            this.devMetodology = devMetodology;
-            this.isProductDev = isProductDev;
-            this.isTeamFormed = isTeamFormed;
-            this.analiticsCount = analiticsCount;
-            this.devsCount = devsCount;
-            this.testerCount = testerCount;
-            this.techpisCount = techpisCount;
-            this.allTeamCount = allTeamCount;
+    public TeamInfo(String devMetodology, boolean ProductDev, boolean TeamFormed, int analiticsNumber, int devsNumber, int testerNumber,
+                    int techpisNumber, int designerNumber, int frontNumber, int backNumber, int fullstackNumber, int allTeamNumber) {
+        this.devMetodology = devMetodology;
+        this.ProductDev = ProductDev;
+        this.TeamFormed = TeamFormed;
+        this.analiticsNumber = analiticsNumber;
+        this.devsNumber = devsNumber;
+        this.testerNumber = testerNumber;
+        this.techpisNumber = techpisNumber;
+        this.designerNumber = designerNumber;
+        this.frontNumber = frontNumber;
+        this.backNumber = backNumber;
+        this.fullstackNumber = fullstackNumber;
+        this.allTeamNumber = allTeamNumber;
 
     }
 }

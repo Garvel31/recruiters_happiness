@@ -44,13 +44,19 @@ public class AllProjectsInfoController {
     @Autowired
     ModelMapper modelMapper;
 
-    //выводим все проекты со всеми полями
+    //выводим все проекты с основными полями активные и не черновики
     @GetMapping(value = "allprojects",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTO(){
         return projectService.showAllProjectInfo();
     }
 
-    //выводим все проекты со всеми полями
+    //выводим все проекты с основными  полями черновики, активные
+    @GetMapping(value = "allprojects/draft", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProjectInfoPageDTO>  showAllDraftProjects() {
+        return projectService.showAllProjectInfoDraft();
+    }
+
+    //выводим все проекты с основными полями
     @GetMapping(value = "allprojects/archive",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showArchiveProjectDTO(){
         return projectService.showAllArchiveProjectInfo();
@@ -67,9 +73,5 @@ public class AllProjectsInfoController {
     }
 
 
-//    //метод для мапинга всех карточек проекта в ДТО который передает только основные поля
-//    private ProjectInfoPageDTO entityToAllProjDtoConv(Project project) {
-//        return modelMapper.map(project, ProjectInfoPageDTO.class);
-//    }
 
 }

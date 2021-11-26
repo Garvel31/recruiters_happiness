@@ -10,8 +10,6 @@ import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
 import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.services.interfaces.ProjectService;
-
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -24,48 +22,24 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     ModelMapper modelMapper;
 
-//    @Autowired
-//    TechnologyServiceImpl technologyService;
 
 
     @Override
     public Project addProject(ProjectDTO projectDTO) {
 
         final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
-//        if(newProject.isDraft())
-//            projectRepository.deleteById(newProject.getId());
+
         newProject.getTeamInfo().setProject(newProject);
         newProject.getProjectType().setProject(newProject);
         newProject.getWorkingConditions().setProject(newProject);
         newProject.setActive(true);
-////        technologyList.forEach(technology -> {
-////            technology.setProject(newProject);
-////            newProject.getTechnology().add(technology);
-////        });
+
         return projectRepository.save(newProject);
     }
 
-//Черновик
-//    public Project addProjectDraft(ProjectDTO projectDTO) {
-//        final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
-//
-//        if (projectRepository.findProjectByDraftIsTrue() == null) {
-//            newProject.setDraft(true);
-//            newProject.getTeamInfo().setProject(newProject);
-//            newProject.getProjectType().setProject(newProject);
-//            newProject.getWorkingConditions().setProject(newProject);
-//        } else {
-//            projectRepository.deleteById(projectRepository.findProjectByDraftIsTrue().getId());
-//            newProject.setDraft(true);
-//            newProject.getTeamInfo().setProject(newProject);
-//            newProject.getProjectType().setProject(newProject);
-//            newProject.getWorkingConditions().setProject(newProject);
-//        }
-
-//        return projectRepository.save(newProject);
-//    }
 
 
+    //обновление проекта
     public Project updateProject(Long id, ProjectDTO projectDTO) {
         Project project = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
         Project newProject = projectRepository.findProjectById(id);
@@ -84,18 +58,20 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.save(newProject);
     }
 
-
+    //удаление проекта
     public void deleteProject(Long id) {
         projectRepository.deleteById(id);
     }
 
-    public void moveProjectToArchive (Long id) {
+    //Перемещаем проект в архив
+    public void moveProjectToArchive(Long id) {
         Project newProject = projectRepository.findProjectById(id);
         newProject.setActive(false);
         projectRepository.save(newProject);
     }
 
-    public void moveProjectFromArchive (Long id) {
+    //Перемещаем проект из архива
+    public void moveProjectFromArchive(Long id) {
         Project newProject = projectRepository.findProjectById(id);
         newProject.setActive(true);
         projectRepository.save(newProject);
@@ -111,38 +87,43 @@ public class ProjectServiceImpl implements ProjectService {
         return MapperUtil.convertList(projectRepository.findAll(), this::entityToProjDtoConv);
     }
 
-    //показываем все карточи в сокращенном формате
+    //показываем все активные карточи в сокращенном формате
     public List<ProjectInfoPageDTO> showAllProjectInfo() {
-        return MapperUtil.convertList(projectRepository.findAllByActiveIsTrue(), this::entityToAllProjDtoConv);
+        return MapperUtil.convertList(projectRepository.findAllByActiveIsTrueAndDraftIsFalse(), this::entityToAllProjDtoConv);
     }
 
-    //показываем все карточи в сокращенном формате
+    //показываем все черновики в сокращенном формате
+    public List<ProjectInfoPageDTO> showAllProjectInfoDraft() {
+        return MapperUtil.convertList(projectRepository.findAllByDraftIsTrueAndActiveIsTrue(), this::entityToAllProjDtoConv);
+    }
+
+    //показываем все архивные карточи в сокращенном формате
     public List<ProjectInfoPageDTO> showAllArchiveProjectInfo() {
         return MapperUtil.convertList(projectRepository.findAllByActiveIsFalse(), this::entityToAllProjDtoConv);
     }
 
-    //показываем все карточи в сокращенном формате
+    //показываем все активные карточи в сокращенном формате с указанной сортировкой
     public List<ProjectInfoPageDTO> showAllProjectInfoSortBy(String sortType) {
         return MapperUtil.convertList(SortBy(sortType), this::entityToAllProjDtoConv);
     }
+    //метод для сортировки
+    public List<Project> SortBy(String sortType) {
+        return projectRepository.findAllByActiveIsTrue(Sort.by(Sort.Direction.ASC, sortType));
+    }
 
-    //показы
-    // ваем все карточи в сокращенном формате
+
+    //фильтруем все карточи в сокращенном формате по полю customer
     public List<ProjectInfoPageDTO> showAllProjectInfoFilteredByCustomer(String customer) {
         return MapperUtil.convertList(FilterByCustomer(customer), this::entityToAllProjDtoConv);
     }
 
 
-    //метод для сортировки
-    public List<Project> SortBy(String sortType) {
-        return projectRepository.findAll(Sort.by(Sort.Direction.ASC, sortType));
-    }
 
     public Project FindDraft() {
         return projectRepository.findProjectByDraftIsTrue();
     }
 
-    //метод для сортировки
+    //метод для фильтра по customer
     public List<Project> FilterByCustomer(String customer) {
         return projectRepository.findAllByCustomer(customer);
     }

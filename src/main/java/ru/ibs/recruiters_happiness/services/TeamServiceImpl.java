@@ -21,11 +21,11 @@ public class TeamServiceImpl implements TeamService {
     ModelMapper modelMapper;
 
     @Override
-    public TeamInfo addTeamInfo(String devMetodology, boolean isProductDev, boolean isTeamFormed, int analiticsCount,
-                                int devsCount, int testerCount, int techpisCount, int allTeamCount) {
-
-        final TeamInfo teamInfo = new TeamInfo( devMetodology,  isProductDev,  isTeamFormed,  analiticsCount,
-         devsCount,  testerCount,  techpisCount,  allTeamCount);
+    public TeamInfo addTeamInfo(String devMetodology, boolean ProductDev, boolean TeamFormed, int analiticsNumber, int devsNumber, int testerNumber,
+                                int techpisNumber, int designerNumber, int frontNumber, int backNumber, int fullstackNumber) {
+        final int allTeamNumber = analiticsNumber + devsNumber + testerNumber + techpisNumber + designerNumber + frontNumber + backNumber + fullstackNumber;
+        final TeamInfo teamInfo = new TeamInfo(devMetodology, ProductDev, TeamFormed, analiticsNumber, devsNumber, testerNumber,
+                techpisNumber, designerNumber, frontNumber, backNumber, fullstackNumber, allTeamNumber);
 
         return teamInfoRepository.save(teamInfo);
     }
@@ -35,11 +35,11 @@ public class TeamServiceImpl implements TeamService {
         TeamInfo teamInfo = teamInfoRepository.findTeamInfoByProjectId(projectid);
         teamInfo.setProductDev(project.getTeamInfo().isProductDev());
         teamInfo.setTeamFormed(project.getTeamInfo().isTeamFormed());
-        teamInfo.setAnaliticsCount(project.getTeamInfo().getAnaliticsCount());
-        teamInfo.setDevsCount(project.getTeamInfo().getDevsCount());
-        teamInfo.setTesterCount(project.getTeamInfo().getTesterCount());
-        teamInfo.setTechpisCount(project.getTeamInfo().getTechpisCount());
-        teamInfo.setAllTeamCount(project.getTeamInfo().getAllTeamCount());
+        teamInfo.setAnaliticsNumber(project.getTeamInfo().getAnaliticsNumber());
+        teamInfo.setDevsNumber(project.getTeamInfo().getDevsNumber());
+        teamInfo.setTesterNumber(project.getTeamInfo().getTesterNumber());
+        teamInfo.setTechpisNumber(project.getTeamInfo().getTechpisNumber());
+        //teamInfo.setAllTeamCount(project.getTeamInfo().getAllTeamCount());
 
         teamInfoRepository.save(teamInfo);
     }
