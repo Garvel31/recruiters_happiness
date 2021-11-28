@@ -23,7 +23,8 @@ public class TeamInfo {
 
     private boolean ProductDev, TeamFormed;
 
-    private int analiticsNumber, devsNumber, testerNumber, techpisNumber, designerNumber, frontNumber, backNumber, fullstackNumber, allTeamNumber;
+    private int analiticsNumber, devsNumber, testerNumber, techpisNumber, designerNumber, frontNumber, backNumber, fullstackNumber;
+    private int allTeamNumber;
 
     @OneToOne
     @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
@@ -31,7 +32,7 @@ public class TeamInfo {
     private Project project;
 
     public TeamInfo(String devMetodology, boolean ProductDev, boolean TeamFormed, int analiticsNumber, int devsNumber, int testerNumber,
-                    int techpisNumber, int designerNumber, int frontNumber, int backNumber, int fullstackNumber, int allTeamNumber) {
+                    int techpisNumber, int designerNumber, int frontNumber, int backNumber, int fullstackNumber) {
         this.devMetodology = devMetodology;
         this.ProductDev = ProductDev;
         this.TeamFormed = TeamFormed;
@@ -43,7 +44,7 @@ public class TeamInfo {
         this.frontNumber = frontNumber;
         this.backNumber = backNumber;
         this.fullstackNumber = fullstackNumber;
-        this.allTeamNumber = allTeamNumber;
+        //this.allTeamNumber = fullstackNumber + backNumber + frontNumber + designerNumber + techpisNumber + testerNumber + devsNumber + analiticsNumber;
 
     }
 }

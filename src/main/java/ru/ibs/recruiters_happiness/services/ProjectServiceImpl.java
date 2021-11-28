@@ -30,6 +30,9 @@ public class ProjectServiceImpl implements ProjectService {
         final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
 
         newProject.getTeamInfo().setProject(newProject);
+        newProject.getTeamInfo().setAllTeamNumber(newProject.getTeamInfo().getAnaliticsNumber() + newProject.getTeamInfo().getBackNumber()
+                + newProject.getTeamInfo().getDevsNumber() + newProject.getTeamInfo().getDesignerNumber() + newProject.getTeamInfo().getFrontNumber()
+                + newProject.getTeamInfo().getFullstackNumber() );
         newProject.getProjectType().setProject(newProject);
         newProject.getWorkingConditions().setProject(newProject);
         newProject.setActive(true);
@@ -116,7 +119,6 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectInfoPageDTO> showAllProjectInfoFilteredByCustomer(String customer) {
         return MapperUtil.convertList(FilterByCustomer(customer), this::entityToAllProjDtoConv);
     }
-
 
 
     public Project FindDraft() {

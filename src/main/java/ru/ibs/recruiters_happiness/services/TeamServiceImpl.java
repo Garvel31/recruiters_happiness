@@ -23,10 +23,10 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public TeamInfo addTeamInfo(String devMetodology, boolean ProductDev, boolean TeamFormed, int analiticsNumber, int devsNumber, int testerNumber,
                                 int techpisNumber, int designerNumber, int frontNumber, int backNumber, int fullstackNumber) {
-        final int allTeamNumber = analiticsNumber + devsNumber + testerNumber + techpisNumber + designerNumber + frontNumber + backNumber + fullstackNumber;
+      //  final int allTeamNumber = analiticsNumber + devsNumber + testerNumber + techpisNumber + designerNumber + frontNumber + backNumber + fullstackNumber;
         final TeamInfo teamInfo = new TeamInfo(devMetodology, ProductDev, TeamFormed, analiticsNumber, devsNumber, testerNumber,
-                techpisNumber, designerNumber, frontNumber, backNumber, fullstackNumber, allTeamNumber);
-
+                techpisNumber, designerNumber, frontNumber, backNumber, fullstackNumber);
+        teamInfo.setAllTeamNumber(fullstackNumber + backNumber + frontNumber + designerNumber + techpisNumber + testerNumber + devsNumber + analiticsNumber);
         return teamInfoRepository.save(teamInfo);
     }
 
@@ -39,8 +39,15 @@ public class TeamServiceImpl implements TeamService {
         teamInfo.setDevsNumber(project.getTeamInfo().getDevsNumber());
         teamInfo.setTesterNumber(project.getTeamInfo().getTesterNumber());
         teamInfo.setTechpisNumber(project.getTeamInfo().getTechpisNumber());
-        //teamInfo.setAllTeamCount(project.getTeamInfo().getAllTeamCount());
+        teamInfo.setDesignerNumber(project.getTeamInfo().getDesignerNumber());
+        teamInfo.setFrontNumber(project.getTeamInfo().getFrontNumber());
+        teamInfo.setBackNumber(project.getTeamInfo().getBackNumber());
+        teamInfo.setFullstackNumber(project.getTeamInfo().getFullstackNumber());
+        teamInfo.setAllTeamNumber(project.getTeamInfo().getAnaliticsNumber()
+        + project.getTeamInfo().getDevsNumber() + project.getTeamInfo().getTesterNumber() + project.getTeamInfo().getTechpisNumber());
 
         teamInfoRepository.save(teamInfo);
     }
+
+
 }

@@ -13,11 +13,8 @@ import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
 import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.repositories.ProjectTypeRepository;
-import ru.ibs.recruiters_happiness.services.ProjectServiceImpl;
-import ru.ibs.recruiters_happiness.services.ProjectTypeServiceImpl;
+import ru.ibs.recruiters_happiness.services.*;
 
-import ru.ibs.recruiters_happiness.services.TeamServiceImpl;
-import ru.ibs.recruiters_happiness.services.WorkingConditionsServiceImpl;
 import ru.ibs.recruiters_happiness.services.interfaces.ProjectTypeService;
 
 import javax.validation.Valid;
@@ -26,7 +23,7 @@ import java.util.List;
 
 @EnableAutoConfiguration
 @RestController
-@RequestMapping(value = "/hrdream/projectcard", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/hrdream", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
 public class CreateUpdateProjectController {
 
     @Autowired
@@ -49,11 +46,14 @@ public class CreateUpdateProjectController {
     WorkingConditionsServiceImpl workingConditionsService;
 
     @Autowired
+    TechnologyServiceImpl technologyService;
+
+    @Autowired
     ModelMapper modelMapper;
 
-
-    @GetMapping(value = "read", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object showProjects(@RequestParam(required = false) Long id) {
+    //Получить проект
+    @GetMapping(value = "projects/{id}", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object showProjects(@PathVariable(name = "id", required = true) Long id) {
         if (id != null) {
             return projectService.showProjectById(id);
         } else {
@@ -62,16 +62,17 @@ public class CreateUpdateProjectController {
     }
 
 
-
-    @PostMapping(value = "create", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    //Добавить проект
+    @PostMapping(value = "projects", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object addProject(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
 
+        technologyService.parseToDict(projectDTO.getTechnology());
         return projectService.addProject(projectDTO);
     }
 
-
-    @PostMapping(value = "update", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateProject(@RequestParam(required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO projectDTO) {
+    //Обновить проект
+    @PutMapping(value = "projects/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateProject(@PathVariable(name = "id", required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO projectDTO) {
 
         projectService.updateProject(id, projectDTO);
         projectTypeService.updateProjectType(id, projectDTO);
@@ -80,21 +81,29 @@ public class CreateUpdateProjectController {
 
     }
 
-    @PostMapping(value = "delete")
-    public void deleteProject(@RequestParam(required = true) Long id) {
+    //Удалить проект
+    @DeleteMapping(value = "projects/{id}")
+    public void deleteProject(@PathVariable(name = "id", required = true) Long id) {
         projectService.deleteProject(id);
     }
 
-    @PostMapping(value = "movetoarchive")
-    public void moveProjectToArchive(@RequestParam(required = true) Long id) {
+    //Отправить в архив
+    @PostMapping(value = "projects/archive/{id}")
+    public void moveProjectToArchive(@PathVariable(name = "id", required = true) Long id) {
         projectService.moveProjectToArchive(id);
     }
 
-    @PostMapping(value = "movefromarchive")
-    public void moveProjectFromArchive(@RequestParam(required = true) Long id) {
+    //Перенести из архива в активные
+    @PostMapping(value = "projects/unzip/{id}")
+    public void moveProjectFromArchive(@PathVariable(name = "id", required = true) Long id) {
         projectService.moveProjectFromArchive(id);
     }
 
+    //Получить проект
+    @GetMapping(value = "projects/tech", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object showTech() {
+        return technologyService.dictLinkedList();
+    }
 
     private ProjectDTO entityToDtoConv(Project project) {
         return modelMapper.map(project, ProjectDTO.class);

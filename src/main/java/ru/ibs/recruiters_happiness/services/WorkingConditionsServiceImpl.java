@@ -21,8 +21,8 @@ public class WorkingConditionsServiceImpl implements WorkingConditionsService {
     ModelMapper modelMapper;
 
     @Override
-    public WorkingConditions addWorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, int lagOfTime, String procedure) {
-        final WorkingConditions workingConditions = new WorkingConditions(isInOffice, isTimeLag, isOverTimeExpect, lagOfTime, procedure);
+    public WorkingConditions addWorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, int lagOfTime, String procedure, String adress) {
+        final WorkingConditions workingConditions = new WorkingConditions(isInOffice, isTimeLag, isOverTimeExpect, lagOfTime, procedure, adress);
         return workingConditionsRepository.save(workingConditions);
     }
 
