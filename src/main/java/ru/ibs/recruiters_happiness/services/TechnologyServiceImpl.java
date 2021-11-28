@@ -36,4 +36,7 @@ public class TechnologyServiceImpl implements DictionaryService {
         return list;
     }
 
+
+
+
 }
