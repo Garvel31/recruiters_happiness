@@ -21,8 +21,8 @@ public class WorkingConditionsServiceImpl implements WorkingConditionsService {
     ModelMapper modelMapper;
 
     @Override
-    public WorkingConditions addWorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, int lagOfTime, String procedure, String adress) {
-        final WorkingConditions workingConditions = new WorkingConditions(isInOffice, isTimeLag, isOverTimeExpect, lagOfTime, procedure, adress);
+    public WorkingConditions addWorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, String schedule, String procedure, String adress) {
+        final WorkingConditions workingConditions = new WorkingConditions(isInOffice, isTimeLag, isOverTimeExpect, schedule, procedure, adress);
         return workingConditionsRepository.save(workingConditions);
     }
 
@@ -32,7 +32,7 @@ public class WorkingConditionsServiceImpl implements WorkingConditionsService {
         workingConditions.setInOffice(project.getWorkingConditions().isInOffice());
         workingConditions.setTimeLag(project.getWorkingConditions().isTimeLag());
         workingConditions.setOverTimeExpect(project.getWorkingConditions().isOverTimeExpect());
-        workingConditions.setLagOfTime(project.getWorkingConditions().getLagOfTime());
+        workingConditions.setSchedule(project.getWorkingConditions().getSchedule());
         workingConditions.setProcedure(project.getWorkingConditions().getProcedure());
         workingConditionsRepository.save(workingConditions);
     }
