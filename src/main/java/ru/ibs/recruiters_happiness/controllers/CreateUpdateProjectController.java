@@ -1,25 +1,18 @@
 package ru.ibs.recruiters_happiness.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.ibs.recruiters_happiness.configuration.MapperUtil;
 import ru.ibs.recruiters_happiness.entities.Project;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
-import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
 import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.repositories.ProjectTypeRepository;
 import ru.ibs.recruiters_happiness.services.*;
 
-import ru.ibs.recruiters_happiness.services.interfaces.ProjectTypeService;
-
 import javax.validation.Valid;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.ArrayList;
 
 @EnableAutoConfiguration
 @RestController
@@ -46,7 +39,7 @@ public class CreateUpdateProjectController {
     WorkingConditionsServiceImpl workingConditionsService;
 
     @Autowired
-    TechnologyServiceImpl technologyService;
+    TechnologyDictServiceImpl technologyService;
 
     @Autowired
     ModelMapper modelMapper;
@@ -62,7 +55,7 @@ public class CreateUpdateProjectController {
     }
 
 
-    //Добавить проект
+    //Создать проект
     @PostMapping(value = "projects", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object addProject(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
 
@@ -100,7 +93,7 @@ public class CreateUpdateProjectController {
     }
 
     //Получить проект
-    @GetMapping(value = "projects/tech", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "projects", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object showTech() {
         return technologyService.dictLinkedList();
     }

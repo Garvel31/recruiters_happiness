@@ -20,6 +20,9 @@ public class ProjectServiceImpl implements ProjectService {
     ProjectRepository projectRepository;
 
     @Autowired
+    TechnologyDictServiceImpl technologyDictService;
+
+    @Autowired
     ModelMapper modelMapper;
 
 
@@ -109,6 +112,7 @@ public class ProjectServiceImpl implements ProjectService {
     public List<ProjectInfoPageDTO> showAllProjectInfoSortBy(String sortType) {
         return MapperUtil.convertList(SortBy(sortType), this::entityToAllProjDtoConv);
     }
+
     //метод для сортировки
     public List<Project> SortBy(String sortType) {
         return projectRepository.findAllByActiveIsTrue(Sort.by(Sort.Direction.ASC, sortType));
