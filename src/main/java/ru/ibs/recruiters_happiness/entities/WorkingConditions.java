@@ -21,18 +21,19 @@ public class WorkingConditions {
 
     private boolean isInOffice, isTimeLag, isOverTimeExpect;
     private int lagOfTime;
-    private String procedure;
+    private String procedure, adress;
 
     @OneToOne
     @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
     @JsonIgnore
     private Project project;
 
-    public WorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, int timeLag, String procedure) {
+    public WorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, int lagOfTime, String procedure, String adress) {
         this.isInOffice = isInOffice;
         this.isTimeLag = isTimeLag;
         this.isOverTimeExpect = isOverTimeExpect;
-        this.lagOfTime = timeLag;
+        this.lagOfTime = lagOfTime;
         this.procedure = procedure;
+        this.adress = adress;
     }
 }

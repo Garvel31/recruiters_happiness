@@ -13,11 +13,8 @@ import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
 import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.repositories.ProjectTypeRepository;
-import ru.ibs.recruiters_happiness.services.ProjectServiceImpl;
-import ru.ibs.recruiters_happiness.services.ProjectTypeServiceImpl;
+import ru.ibs.recruiters_happiness.services.*;
 
-import ru.ibs.recruiters_happiness.services.TeamServiceImpl;
-import ru.ibs.recruiters_happiness.services.WorkingConditionsServiceImpl;
 import ru.ibs.recruiters_happiness.services.interfaces.ProjectTypeService;
 
 import javax.validation.Valid;
@@ -38,8 +35,6 @@ public class CreateUpdateProjectController {
     @Autowired
     ProjectServiceImpl projectService;
 
-//    @Autowired
-//    TechnologyServiceImpl technologyService;
 
     @Autowired
     ProjectTypeServiceImpl projectTypeService;
@@ -51,76 +46,63 @@ public class CreateUpdateProjectController {
     WorkingConditionsServiceImpl workingConditionsService;
 
     @Autowired
+    TechnologyServiceImpl technologyService;
+
+    @Autowired
     ModelMapper modelMapper;
 
-
-    @GetMapping(value = "read", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object showProjects(@RequestParam(required = false) Long id) {
+    //Получить проект
+    @GetMapping(value = "projects/{id}", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object showProjects(@PathVariable(name = "id", required = true) Long id) {
         if (id != null) {
-            Project project = projectService.showProjectById(id);
-            return entityToDtoConv(project);
+            return projectService.showProjectById(id);
         } else {
-            LinkedList<Project> projectList = new LinkedList<>(projectService.showAllProject());
-            LinkedList<ProjectDTO> projectDTOList = new LinkedList<>();
-            projectList.forEach(project -> projectDTOList.add(entityToDtoConv(project)));
-            return projectDTOList;
+            return projectService.showAllProject();
         }
+    }
+
+
+    //Добавить проект
+    @PostMapping(value = "projects", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object addProject(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
+
+        technologyService.parseToDict(projectDTO.getTechnology());
+        return projectService.addProject(projectDTO);
+    }
+
+    //Обновить проект
+    @PutMapping(value = "projects/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void updateProject(@PathVariable(name = "id", required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO projectDTO) {
+
+        projectService.updateProject(id, projectDTO);
+        projectTypeService.updateProjectType(id, projectDTO);
+        teamService.updateTeamInfo(id, projectDTO);
+        workingConditionsService.updateWorkingConditions(id, projectDTO);
 
     }
 
-    @PostMapping(value = "create", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object addProject(@RequestBody(required = false) @Valid ProjectDTO body) {
-        Project newProject = DtoToEntityConv(body);
-//        LinkedList<Technology> technologyLinkedList = new LinkedList<>();
-//        technologyLinkedList.addAll(newProject.getTechnology());
-        return projectService.addProject(newProject.getProject_name(), newProject.getCustomer(), newProject.getProj_stage(), newProject.isGost_doc(),
-                newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
-                newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getStakeholder_number(),
-                newProject.getTechnology(), newProject.getTeamInfo(), newProject.getProjectType(), newProject.getWorkingConditions());
-    }
-
-    @PostMapping(value = "update", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void updateProject(@RequestParam(required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO body) {
-        Project newProject = DtoToEntityConv(body);
-//        LinkedList<Technology> technologyLinkedList = new LinkedList<>();
-//        technologyLinkedList.addAll(newProject.getTechnology());
-        projectService.updateProject(id, newProject.getProject_name(), newProject.getCustomer(), newProject.getProj_stage(), newProject.isGost_doc(),
-                newProject.getEnd_terms(), newProject.getFunc_direction(), newProject.getSubject_area(), newProject.getDescription(),
-                newProject.getProblem_to_solve(), newProject.getProjectAuthor(), newProject.getStakeholder_number(),
-                newProject.getTechnology());
-
-        projectTypeService.updateProjectType(id, newProject.getProjectType().isPayType(), newProject.getProjectType().isPO(),
-                newProject.getProjectType().isMVP(), newProject.getProjectType().isFromScratch());
-
-        teamService.updateTeamInfo(id, newProject.getTeamInfo().isProductDev(), newProject.getTeamInfo().isTeamFormed(),
-                newProject.getTeamInfo().getAnaliticsCount(), newProject.getTeamInfo().getDevsCount(), newProject.getTeamInfo().getTesterCount(),
-                newProject.getTeamInfo().getTechpisCount(), newProject.getTeamInfo().getAllTeamCount());
-
-        workingConditionsService.updateWorkingConditions(id, newProject.getWorkingConditions().isInOffice(),
-                newProject.getWorkingConditions().isTimeLag(), newProject.getWorkingConditions().isOverTimeExpect(),
-                newProject.getWorkingConditions().getLagOfTime(), newProject.getWorkingConditions().getProcedure());
-
-    }
-
-    @PostMapping(value = "delete")
-    public void deleteProject(@RequestParam(required = true) Long id) {
+    //Удалить проект
+    @DeleteMapping(value = "projects/{id}")
+    public void deleteProject(@PathVariable(name = "id", required = true) Long id) {
         projectService.deleteProject(id);
     }
 
-    @GetMapping("allprojects")
-    private List<ProjectInfoPageDTO> readDTOCard(){
-        List<Project> tables = projectService.showAllProject();
-        return MapperUtil.convertList(tables, this::entityToAllProjDtoConv);
+    //Отправить в архив
+    @PostMapping(value = "projects/archive/{id}")
+    public void moveProjectToArchive(@PathVariable(name = "id", required = true) Long id) {
+        projectService.moveProjectToArchive(id);
     }
 
-    @GetMapping("allprojects/sort/bycustomer")
-    private List<ProjectInfoPageDTO> readDTOCardSortByCustomer(){
-        List<Project> tables = projectService.showAllProjectInfoSortByCustomer();
-        return MapperUtil.convertList(tables, this::entityToAllProjDtoConv);
+    //Перенести из архива в активные
+    @PostMapping(value = "projects/unzip/{id}")
+    public void moveProjectFromArchive(@PathVariable(name = "id", required = true) Long id) {
+        projectService.moveProjectFromArchive(id);
     }
 
-    private ProjectInfoPageDTO entityToAllProjDtoConv(Project project) {
-        return modelMapper.map(project, ProjectInfoPageDTO.class);
+    //Получить проект
+    @GetMapping(value = "projects/tech", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object showTech() {
+        return technologyService.dictLinkedList();
     }
 
     private ProjectDTO entityToDtoConv(Project project) {

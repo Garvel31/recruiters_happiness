@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import ru.ibs.recruiters_happiness.entities.ProjectType;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -14,14 +15,19 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ProjectInfoPageDTO {
 
-    @NotNull
+    private Long id;
+
+
     private String customer;
+    private String proj_stage;
 
-    private String projectAuthor;
+    private String projectAuthor, problem_to_solve;
 
-    private boolean isActive;
+    private boolean active;
+    private boolean gost_doc;
 
     @JsonFormat(pattern="yyyy-MM-dd")
     LocalDateTime created;
 
+    private ProjectType projectType;
 }

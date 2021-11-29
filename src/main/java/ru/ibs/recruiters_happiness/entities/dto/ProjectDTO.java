@@ -21,6 +21,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ProjectDTO {
 
+    private Long id;
 
     @NotNull
     private String project_name;
@@ -46,9 +47,9 @@ public class ProjectDTO {
     private String func_direction, subject_area, description, problem_to_solve, projectAuthor, technology;
     private int stakeholder_number;
 
-    private boolean isActive;
-    private boolean isDraft;
-//    private Technology technology;
+    private boolean active;
+    private boolean draft;
+
 
     private TeamInfo teamInfo;
     private ProjectType projectType;

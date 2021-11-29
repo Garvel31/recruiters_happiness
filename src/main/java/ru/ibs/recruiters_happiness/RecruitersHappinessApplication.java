@@ -9,6 +9,7 @@ import ru.ibs.recruiters_happiness.entities.TeamInfo;
 import ru.ibs.recruiters_happiness.entities.WorkingConditions;
 
 import ru.ibs.recruiters_happiness.services.ProjectServiceImpl;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 import javax.annotation.PostConstruct;
@@ -18,6 +19,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @SpringBootApplication
+@EnableSwagger2
 public class RecruitersHappinessApplication {
 
     @Autowired
