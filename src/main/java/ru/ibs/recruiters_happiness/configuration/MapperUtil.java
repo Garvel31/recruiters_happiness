@@ -4,8 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import ru.ibs.recruiters_happiness.entities.Project;
+import ru.ibs.recruiters_happiness.entities.Technology;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
+import ru.ibs.recruiters_happiness.entities.dto.TechnologyDTO;
 
 import java.util.List;
 import java.util.function.Function;
@@ -31,5 +33,8 @@ public class MapperUtil {
         return modelMapper.map(project, ProjectDTO.class);
     }
 
+    public static TechnologyDTO entityToTechDtoConv(Technology technology, ModelMapper modelMapper) {
+        return modelMapper.map(technology, TechnologyDTO.class);
+    }
 
 }
