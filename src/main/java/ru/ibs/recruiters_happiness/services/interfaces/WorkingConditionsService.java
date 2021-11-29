@@ -4,5 +4,5 @@ import ru.ibs.recruiters_happiness.entities.WorkingConditions;
 
 public interface WorkingConditionsService {
 
-     WorkingConditions addWorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, int lagOfTime, String procedure, String adress);
+     WorkingConditions addWorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, String schedule, String procedure, String adress);
 }
