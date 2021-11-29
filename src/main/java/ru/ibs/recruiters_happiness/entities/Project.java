@@ -50,19 +50,15 @@ public class Project {
         setUpdated(LocalDateTime.now());
     }
 
-    @NotNull
+
     private String project_name;
-
-    @NotNull
     private String customer;
-
-    @NotNull
     private String proj_stage;
 
 
     private boolean gost_doc;
-    private boolean isActive = true;
-    private boolean isDraft = false;
+    private boolean active = true;
+    private boolean draft = false;
 
     @NotNull
     @DateTimeFormat(pattern = "dd-MM-yyyy")
@@ -71,9 +67,6 @@ public class Project {
 
     private String func_direction, subject_area, description, problem_to_solve, projectAuthor, technology;
     private int stakeholder_number;
-
-//    @OneToMany(cascade = CascadeType.ALL, mappedBy = "project")
-//    private List<Technology> technology;
 
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -100,7 +93,7 @@ public class Project {
         this.projectAuthor = projectAuthor;
         this.stakeholder_number = stakeholder_number;
         this.technology = technology;
-//        this.technology = new LinkedList<>();
+
 
     }
 }

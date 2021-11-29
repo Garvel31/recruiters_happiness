@@ -11,8 +11,17 @@ import java.util.List;
 public interface ProjectRepository extends CrudRepository<Project, Long> {
 
     Project findProjectById(Long id);
-    List<Project> findAll();
-    Project findAllByOrderByProjectAuthor();
 
+    Project findProjectByIdAndActiveIsTrue(Long id);
+    List<Project> findAll();
+    List<Project> findAllByActiveIsTrue(Sort customer);
+  //  List<Project> findAllByActiveIsTrue();
+    List<Project> findAllByActiveIsTrueAndDraftIsFalse();
+    List<Project> findAllByActiveIsFalse();
+    List<Project> findAllByDraftIsTrueAndActiveIsTrue();
+    List<Project> findAllByDraftIsFalse();
+    Project findAllByOrderByProjectAuthor();
+    List<Project> findAllByCustomer(String customer);
     List<Project> findAll(Sort customer);
+    Project findProjectByDraftIsTrue();
 }
