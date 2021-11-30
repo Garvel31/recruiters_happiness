@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ibs.recruiters_happiness.configuration.MapperUtil;
 import ru.ibs.recruiters_happiness.entities.Project;
@@ -45,16 +46,19 @@ public class AllProjectsInfoController {
     ModelMapper modelMapper;
 
     //выводим все проекты с основными полями активные и не черновики
+    @PreAuthorize("hasAnyRole('PM', 'HR')")
     @GetMapping(value = "activeprojects",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTO(){
         return projectService.showAllProjectInfo();
     }
 
+    @PreAuthorize("hasAnyRole('PM', 'HR')")
     @GetMapping(value = "activeprojects/sortby/{sortType}",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTOSortBy(@PathVariable(name = "sortType", required = true) String sortType){
         return projectService.showAllProjectInfoSortBy(sortType);
     }
 
+    @PreAuthorize("hasAnyRole('PM', 'HR')")
     @GetMapping(value = "activeprojects/filterby/customer",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTOFilterByCustomer(@RequestParam(required = true) String customer){
         return projectService.showAllProjectInfoFilteredByCustomer(customer);
@@ -62,12 +66,14 @@ public class AllProjectsInfoController {
 
 
     //выводим все проекты с основными  полями черновики, активные
+    @PreAuthorize("hasRole('PM')")
     @GetMapping(value = "draftprojects", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO>  showAllDraftProjects() {
         return projectService.showAllProjectInfoDraft();
     }
 
     //выводим все проекты с основными полями
+    @PreAuthorize("hasRole('PM')")
     @GetMapping(value = "archiveprojects",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showArchiveProjectDTO(){
         return projectService.showAllArchiveProjectInfo();
