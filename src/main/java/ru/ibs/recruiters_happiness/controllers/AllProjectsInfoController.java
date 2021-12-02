@@ -78,4 +78,13 @@ public class AllProjectsInfoController {
     public List<ProjectInfoPageDTO> showArchiveProjectDTO(){
         return projectService.showAllArchiveProjectInfo();
     }
+
+    @PreAuthorize("hasAnyRole('PM', 'HR')")
+    @GetMapping(value = "activeprojects/filter/some",  produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<ProjectInfoPageDTO> showProjectDTOFilterBy(@RequestBody ProjectInfoPageDTO projectInfoPageDTO){
+//        String projectAuthor = "Putin";
+//        Boolean active = true;
+        return projectService.convertFiltredByCriteria(projectInfoPageDTO.getProjectAuthor(), projectInfoPageDTO.isActive(), projectInfoPageDTO.getCustomer());
+    }
 }
+   // @RequestParam(required = false) String projectAuthor, @RequestParam(required = false) String customer

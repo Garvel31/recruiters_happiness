@@ -3,6 +3,7 @@ package ru.ibs.recruiters_happiness.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.ibs.recruiters_happiness.configuration.MapperUtil;
 import ru.ibs.recruiters_happiness.entities.*;
@@ -10,6 +11,12 @@ import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
 import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.services.interfaces.ProjectService;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,7 +33,6 @@ public class ProjectServiceImpl implements ProjectService {
     ModelMapper modelMapper;
 
 
-
     @Override
     public Project addProject(ProjectDTO projectDTO) {
 
@@ -35,14 +41,13 @@ public class ProjectServiceImpl implements ProjectService {
         newProject.getTeamInfo().setProject(newProject);
         newProject.getTeamInfo().setAllTeamNumber(newProject.getTeamInfo().getAnaliticsNumber() + newProject.getTeamInfo().getBackNumber()
                 + newProject.getTeamInfo().getDevsNumber() + newProject.getTeamInfo().getDesignerNumber() + newProject.getTeamInfo().getFrontNumber()
-                + newProject.getTeamInfo().getFullstackNumber() );
+                + newProject.getTeamInfo().getFullstackNumber());
         newProject.getProjectType().setProject(newProject);
         newProject.getWorkingConditions().setProject(newProject);
         newProject.setActive(true);
 
         return projectRepository.save(newProject);
     }
-
 
 
     //обновление проекта
@@ -144,5 +149,47 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectInfoPageDTO entityToAllProjDtoConv(Project project) {
         return modelMapper.map(project, ProjectInfoPageDTO.class);
     }
+
+    //фильтруем все карточи в сокращенном формате по полю customer
+    public List<ProjectInfoPageDTO> convertFiltredByCriteria(String projectAuthor, Boolean active, String customer) {
+        return MapperUtil.convertList(findByCriteria(projectAuthor, active, customer), this::entityToAllProjDtoConv);
+    }
+
+//    public List<Project> findByCriteria(String projectAuthor, Boolean active, String customer) {
+//        return projectRepository.findAll((Specification<Project>) (root, query, criteriaBuilder) -> {
+//            List<Predicate> predicates = new ArrayList<>();
+//            if (projectAuthor != null) {
+//                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("projectAuthor"), projectAuthor )));
+//            }
+//            if (active != null) {
+//                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), active )));
+//            }
+//            if (customer != null) {
+//                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("customer"), customer )));
+//            }
+//            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+//        });
+//    }
+
+    //todo Разобраться c gost_docs
+public List<Project> findByCriteria(String projectAuthor, boolean gost_doc, String customer){
+    return projectRepository.findAll(new Specification<Project>() {
+        @Override
+        public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+            List<Predicate> predicates = new ArrayList<>();
+            if(projectAuthor!=null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("projectAuthor"), projectAuthor)));
+            }
+            if(gost_doc){
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("gost_doc"), gost_doc)));
+            }
+            if (customer != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer"), customer )));
+            }
+            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+        }
+    });
+}
+
 
 }

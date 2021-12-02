@@ -8,7 +8,7 @@ public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int uId;
+    private Long uId;
 
     private String role;
     private String username;
@@ -42,11 +42,11 @@ public class AppUser {
         setEnabled(appUser.isEnabled());
     }
 
-    public int getuId() {
+    public Long getuId() {
         return uId;
     }
 
-    public void setuId(int uId) {
+    public void setuId(Long uId) {
         this.uId = uId;
     }
 

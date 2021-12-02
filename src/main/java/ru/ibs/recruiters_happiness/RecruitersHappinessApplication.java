@@ -14,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
 
-import static ru.ibs.recruiters_happiness.configuration.ApplicationUserRole.PM;
+import static ru.ibs.recruiters_happiness.configuration.ApplicationUserRole.*;
 
 @SpringBootApplication
 @EnableSwagger2
@@ -39,10 +39,14 @@ public class RecruitersHappinessApplication {
 
     @PostConstruct
     private void postConstruct() {
-
-
-        AppUser appUser = new AppUser(PM.name(), "ProductManager", passwordEncoder.encode("12345"), true, true, true, true);
+        dbApplicationUserDAO.deleteAll();
+        AppUser appUser = new AppUser(PM.name(), "ProductManager", "12345", true, true, true, true);
         dbApplicationUserDAO.save(appUser);
+        AppUser appUser1 = new AppUser(HR.name(),  "HeadRecruiter", "12345", true, true, true, true);
+        dbApplicationUserDAO.save(appUser1);
+        AppUser appUser2 = new AppUser(DM.name(), "DevManager", "12345", true, true, true, true);
+        dbApplicationUserDAO.save(appUser2);
+
 
 
     }
@@ -52,3 +56,10 @@ public class RecruitersHappinessApplication {
     }
 
 }
+
+
+//todo unit test
+//todo docker file
+//todo справочник для объектной области
+//todo sql.init
+//todo фильтпы и сортировку
