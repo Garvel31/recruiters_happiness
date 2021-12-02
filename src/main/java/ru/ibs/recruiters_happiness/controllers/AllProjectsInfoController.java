@@ -7,8 +7,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.ibs.recruiters_happiness.configuration.MapperUtil;
-import ru.ibs.recruiters_happiness.entities.Project;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
 import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.repositories.ProjectTypeRepository;
@@ -52,16 +50,11 @@ public class AllProjectsInfoController {
         return projectService.showAllProjectInfo();
     }
 
+    //сортировка по полю, поле передаем в path var
     @PreAuthorize("hasAnyRole('PM', 'HR')")
     @GetMapping(value = "activeprojects/sortby/{sortType}",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTOSortBy(@PathVariable(name = "sortType", required = true) String sortType){
         return projectService.showAllProjectInfoSortBy(sortType);
-    }
-
-    @PreAuthorize("hasAnyRole('PM', 'HR')")
-    @GetMapping(value = "activeprojects/filterby/customer",  produces = MediaType.APPLICATION_JSON_VALUE)
-    public List<ProjectInfoPageDTO> showProjectDTOFilterByCustomer(@RequestParam(required = true) String customer){
-        return projectService.showAllProjectInfoFilteredByCustomer(customer);
     }
 
 
@@ -79,11 +72,10 @@ public class AllProjectsInfoController {
         return projectService.showAllArchiveProjectInfo();
     }
 
+    //фильтрация с использованием FilterCriteria и Specification
     @PreAuthorize("hasAnyRole('PM', 'HR')")
     @GetMapping(value = "activeprojects/filter/some",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTOFilterBy(@RequestBody ProjectInfoPageDTO projectInfoPageDTO){
-//        String projectAuthor = "Putin";
-//        Boolean active = true;
         return projectService.convertFiltredByCriteria(projectInfoPageDTO.getProjectAuthor(), projectInfoPageDTO.isActive(), projectInfoPageDTO.getCustomer());
     }
 }

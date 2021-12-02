@@ -38,12 +38,12 @@ public class ProjectServiceImpl implements ProjectService {
 
         final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
 
-        newProject.getTeamInfo().setProject(newProject);
+//        newProject.getTeamInfo().setProject(newProject);
         newProject.getTeamInfo().setAllTeamNumber(newProject.getTeamInfo().getAnaliticsNumber() + newProject.getTeamInfo().getBackNumber()
                 + newProject.getTeamInfo().getDevsNumber() + newProject.getTeamInfo().getDesignerNumber() + newProject.getTeamInfo().getFrontNumber()
                 + newProject.getTeamInfo().getFullstackNumber());
-        newProject.getProjectType().setProject(newProject);
-        newProject.getWorkingConditions().setProject(newProject);
+//        newProject.getProjectType().setProject(newProject);
+//        newProject.getWorkingConditions().setProject(newProject);
         newProject.setActive(true);
 
         return projectRepository.save(newProject);
@@ -123,21 +123,21 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findAllByActiveIsTrue(Sort.by(Sort.Direction.ASC, sortType));
     }
 
+//Неиспользуемый фильтр:
+//    //фильтруем все карточи в сокращенном формате по полю customer
+//    public List<ProjectInfoPageDTO> showAllProjectInfoFilteredByCustomer(String customer) {
+//        return MapperUtil.convertList(FilterByCustomer(customer), this::entityToAllProjDtoConv);
+//    }
 
-    //фильтруем все карточи в сокращенном формате по полю customer
-    public List<ProjectInfoPageDTO> showAllProjectInfoFilteredByCustomer(String customer) {
-        return MapperUtil.convertList(FilterByCustomer(customer), this::entityToAllProjDtoConv);
-    }
 
+//    public Project FindDraft() {
+//        return projectRepository.findProjectByDraftIsTrue();
+//    }
 
-    public Project FindDraft() {
-        return projectRepository.findProjectByDraftIsTrue();
-    }
-
-    //метод для фильтра по customer
-    public List<Project> FilterByCustomer(String customer) {
-        return projectRepository.findAllByCustomer(customer);
-    }
+//    //метод для фильтра по customer
+//    public List<Project> FilterByCustomer(String customer) {
+//        return projectRepository.findAllByCustomer(customer);
+//    }
 
 
     //метод для мапинга
@@ -150,46 +150,31 @@ public class ProjectServiceImpl implements ProjectService {
         return modelMapper.map(project, ProjectInfoPageDTO.class);
     }
 
-    //фильтруем все карточи в сокращенном формате по полю customer
+    //фильтруем все карточи в сокращенном формате по полю customer, author, active
     public List<ProjectInfoPageDTO> convertFiltredByCriteria(String projectAuthor, Boolean active, String customer) {
         return MapperUtil.convertList(findByCriteria(projectAuthor, active, customer), this::entityToAllProjDtoConv);
     }
 
-//    public List<Project> findByCriteria(String projectAuthor, Boolean active, String customer) {
-//        return projectRepository.findAll((Specification<Project>) (root, query, criteriaBuilder) -> {
-//            List<Predicate> predicates = new ArrayList<>();
-//            if (projectAuthor != null) {
-//                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("projectAuthor"), projectAuthor )));
-//            }
-//            if (active != null) {
-//                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), active )));
-//            }
-//            if (customer != null) {
-//                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("customer"), customer )));
-//            }
-//            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-//        });
-//    }
 
-    //todo Разобраться c gost_docs
-public List<Project> findByCriteria(String projectAuthor, boolean gost_doc, String customer){
-    return projectRepository.findAll(new Specification<Project>() {
-        @Override
-        public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
-            List<Predicate> predicates = new ArrayList<>();
-            if(projectAuthor!=null) {
-                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("projectAuthor"), projectAuthor)));
+    //Метод для фильтрации с использованием Specification
+    public List<Project> findByCriteria(String projectAuthor, boolean active, String customer) {
+        return projectRepository.findAll(new Specification<Project>() {
+            @Override
+            public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new ArrayList<>();
+                if (projectAuthor != null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("projectAuthor"), projectAuthor)));
+                }
+
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), active)));
+
+                if (customer != null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer"), customer)));
+                }
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
             }
-            if(gost_doc){
-                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("gost_doc"), gost_doc)));
-            }
-            if (customer != null) {
-                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer"), customer )));
-            }
-            return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
-        }
-    });
-}
+        });
+    }
 
 
 }

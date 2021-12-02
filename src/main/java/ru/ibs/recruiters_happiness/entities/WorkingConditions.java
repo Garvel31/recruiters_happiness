@@ -23,10 +23,10 @@ public class WorkingConditions {
 
     private String procedure, adress, schedule;
 
-    @OneToOne
-    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
-    @JsonIgnore
-    private Project project;
+//    @OneToOne
+//    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
+//    @JsonIgnore
+//    private Project project;
 
     public WorkingConditions(boolean isInOffice, boolean isTimeLag, boolean isOverTimeExpect, String schedule, String procedure, String adress) {
         this.isInOffice = isInOffice;

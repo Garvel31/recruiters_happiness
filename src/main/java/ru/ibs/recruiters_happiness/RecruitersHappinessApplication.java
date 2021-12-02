@@ -37,19 +37,17 @@ public class RecruitersHappinessApplication {
 //    TechnologyRepository technologyRepository;
 
 
-    @PostConstruct
-    private void postConstruct() {
-        dbApplicationUserDAO.deleteAll();
-        AppUser appUser = new AppUser(PM.name(), "ProductManager", "12345", true, true, true, true);
-        dbApplicationUserDAO.save(appUser);
-        AppUser appUser1 = new AppUser(HR.name(),  "HeadRecruiter", "12345", true, true, true, true);
-        dbApplicationUserDAO.save(appUser1);
-        AppUser appUser2 = new AppUser(DM.name(), "DevManager", "12345", true, true, true, true);
-        dbApplicationUserDAO.save(appUser2);
-
-
-
-    }
+//    @PostConstruct
+//    private void postConstruct() {
+//        dbApplicationUserDAO.deleteAll();
+//        AppUser appUser = new AppUser(PM.name(), "ProductManager", "12345", true, true, true, true);
+//        dbApplicationUserDAO.save(appUser);
+//        AppUser appUser1 = new AppUser(HR.name(),  "HeadRecruiter", "12345", true, true, true, true);
+//        dbApplicationUserDAO.save(appUser1);
+//        AppUser appUser2 = new AppUser(DM.name(), "DevManager", "12345", true, true, true, true);
+//        dbApplicationUserDAO.save(appUser2);
+//
+//    }
 
     public static void main(String[] args) {
         SpringApplication.run(RecruitersHappinessApplication.class, args);
@@ -61,5 +59,4 @@ public class RecruitersHappinessApplication {
 //todo unit test
 //todo docker file
 //todo справочник для объектной области
-//todo sql.init
-//todo фильтпы и сортировку
+

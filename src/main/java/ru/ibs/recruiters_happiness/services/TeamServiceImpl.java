@@ -8,6 +8,7 @@ import ru.ibs.recruiters_happiness.entities.Project;
 import ru.ibs.recruiters_happiness.entities.ProjectType;
 import ru.ibs.recruiters_happiness.entities.TeamInfo;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
+import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.repositories.TeamInfoRepository;
 import ru.ibs.recruiters_happiness.services.interfaces.TeamService;
 
@@ -16,6 +17,8 @@ public class TeamServiceImpl implements TeamService {
 
     @Autowired
     TeamInfoRepository teamInfoRepository;
+    @Autowired
+    ProjectRepository projectRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -32,7 +35,8 @@ public class TeamServiceImpl implements TeamService {
 
     public void updateTeamInfo(Long projectid, ProjectDTO projectDTO) {
         Project project = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
-        TeamInfo teamInfo = teamInfoRepository.findTeamInfoByProjectId(projectid);
+       // TeamInfo teamInfo = teamInfoRepository.findTeamInfoByProjectId(projectid);
+        TeamInfo teamInfo = teamInfoRepository.findTeamInfoById(projectRepository.findProjectById(projectid).getTeamInfo().getId());
         teamInfo.setProductDev(project.getTeamInfo().isProductDev());
         teamInfo.setTeamFormed(project.getTeamInfo().isTeamFormed());
         teamInfo.setAnaliticsNumber(project.getTeamInfo().getAnaliticsNumber());
