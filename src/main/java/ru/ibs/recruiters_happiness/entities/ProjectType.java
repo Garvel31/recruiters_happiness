@@ -23,10 +23,10 @@ public class ProjectType {
     private boolean isMVP;
     private boolean isFromScratch;
 
-    @OneToOne
-    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
-    @JsonIgnore
-    private Project project;
+//    @OneToOne
+//    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
+//    @JsonIgnore
+//    private Project project;
 
     public ProjectType(boolean isPayType, boolean isPO, boolean isMVP, boolean isFromScratch) {
         this.isPayType = isPayType;
