@@ -19,15 +19,13 @@ public class ProjectInfoPageDTO {
 
 
     private String customer;
-    private String proj_stage;
+    private String project_name;
 
-    private String projectAuthor, problem_to_solve;
+    private String func_direction, subject_area;
+    private String proj_stage, projectAuthor;
 
     private boolean active;
-    private boolean gost_doc;
 
     @JsonFormat(pattern="yyyy-MM-dd")
-    LocalDateTime created;
-
-    private ProjectType projectType;
+    private String end_terms;
 }

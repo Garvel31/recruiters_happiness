@@ -41,11 +41,14 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.GET, "/hrdream/projects/card/**").permitAll()
+//                .antMatchers(HttpMethod.GET, "/hrdream/projects/card/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/hrdream/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .httpBasic()
+                .and()
+                .cors();
 
     }
 

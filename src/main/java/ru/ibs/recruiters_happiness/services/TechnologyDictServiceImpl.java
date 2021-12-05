@@ -33,7 +33,7 @@ public class TechnologyDictServiceImpl implements DictionaryService {
 
     public void parseToDict(String tech) {
         if (tech != null) {
-            List<String> techs = List.of(tech.split(", "));
+            List<String> techs = List.of(tech.split(", +|,+|\\s+"));
             techs.forEach(s -> {
                 try {
                     technologyRepository.save(new Technology(s));

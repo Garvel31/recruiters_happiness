@@ -27,4 +27,6 @@ public interface ProjectRepository extends CrudRepository<Project, Long>, JpaSpe
     List<Project> findAll(Sort customer);
     Project findProjectByDraftIsTrue();
     List<Project> findAll(Specification<Project> projectSpecification);
+
+
 }

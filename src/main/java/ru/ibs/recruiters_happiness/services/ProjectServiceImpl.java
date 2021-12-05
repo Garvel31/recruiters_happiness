@@ -37,14 +37,10 @@ public class ProjectServiceImpl implements ProjectService {
     public Project addProject(ProjectDTO projectDTO) {
 
         final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
-
-//        newProject.getTeamInfo().setProject(newProject);
         newProject.getTeamInfo().setAllTeamNumber(newProject.getTeamInfo().getAnaliticsNumber() + newProject.getTeamInfo().getBackNumber()
                 + newProject.getTeamInfo().getDevsNumber() + newProject.getTeamInfo().getDesignerNumber() + newProject.getTeamInfo().getFrontNumber()
-                + newProject.getTeamInfo().getFullstackNumber());
-//        newProject.getProjectType().setProject(newProject);
-//        newProject.getWorkingConditions().setProject(newProject);
-        newProject.setActive(true);
+                + newProject.getTeamInfo().getFullstackNumber() + newProject.getTeamInfo().getTechpisNumber() + newProject.getTeamInfo().getTesterNumber());
+//        newProject.setActive(true);
 
         return projectRepository.save(newProject);
     }
@@ -151,13 +147,13 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     //фильтруем все карточи в сокращенном формате по полю customer, author, active
-    public List<ProjectInfoPageDTO> convertFiltredByCriteria(String projectAuthor, Boolean active, String customer) {
-        return MapperUtil.convertList(findByCriteria(projectAuthor, active, customer), this::entityToAllProjDtoConv);
+    public List<ProjectInfoPageDTO> convertFiltredByCriteria(String projectAuthor, String proj_stage, String customer) {
+        return MapperUtil.convertList(findByCriteria(projectAuthor, proj_stage, customer), this::entityToAllProjDtoConv);
     }
 
 
     //Метод для фильтрации с использованием Specification
-    public List<Project> findByCriteria(String projectAuthor, boolean active, String customer) {
+    public List<Project> findByCriteria(String projectAuthor, String proj_stage, String customer) {
         return projectRepository.findAll(new Specification<Project>() {
             @Override
             public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
@@ -165,9 +161,10 @@ public class ProjectServiceImpl implements ProjectService {
                 if (projectAuthor != null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("projectAuthor"), projectAuthor)));
                 }
-
-                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), active)));
-
+                if (proj_stage != null) {
+                predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("proj_stage"), proj_stage)));
+                }
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), true)));
                 if (customer != null) {
                     predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer"), customer)));
                 }

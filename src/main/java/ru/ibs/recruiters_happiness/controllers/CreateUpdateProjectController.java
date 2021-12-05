@@ -45,19 +45,23 @@ public class CreateUpdateProjectController {
     @Autowired
     ModelMapper modelMapper;
 
-    //Получить проект
-    @GetMapping(value = "projects/card/{id}", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Object showProjects(@PathVariable(name = "id", required = true) Long id) {
-        if (id != null) {
-            return projectService.showProjectById(id);
-        } else {
-            return projectService.showAllProject();
-        }
+    //Получить проект по id
+    @GetMapping(value = "projects/{id}", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object showProject(@PathVariable(name = "id", required = true) Long id) {
+
+        return projectService.showProjectById(id);
+
     }
 
+    //Получить все проекты
+    @GetMapping(value = "projects", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Object showProjects() {
+
+        return projectService.showAllProject();
+    }
 
     //Создать проект
-    @PreAuthorize("hasRole('PM')")
+//    @PreAuthorize("hasRole('PM')")
     @PostMapping(value = "projects", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object addProject(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
 
@@ -100,17 +104,17 @@ public class CreateUpdateProjectController {
 
     //Получить справочник технологий
     @PreAuthorize("hasRole('PM')")
-    @GetMapping(value = "projects", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "projects/tech", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object showTech() {
         return technologyService.dictLinkedList();
     }
 
-    private ProjectDTO entityToDtoConv(Project project) {
-        return modelMapper.map(project, ProjectDTO.class);
-    }
-
-    private Project DtoToEntityConv(ProjectDTO projectDto) {
-        return modelMapper.map(projectDto, Project.class);
-    }
+//    private ProjectDTO entityToDtoConv(Project project) {
+//        return modelMapper.map(project, ProjectDTO.class);
+//    }
+//
+//    private Project DtoToEntityConv(ProjectDTO projectDto) {
+//        return modelMapper.map(projectDto, Project.class);
+//    }
 
 }

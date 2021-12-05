@@ -39,7 +39,7 @@ public class ProjectDTO {
     @DateTimeFormat(pattern = "dd-MM-yyyy")
     private String end_terms;
 
-    @JsonFormat(pattern="yyyy-MM-dd")
+   @JsonFormat(pattern="yyyy-MM-dd")
     LocalDateTime created;
     @JsonFormat(pattern="yyyy-MM-dd")
     LocalDateTime updated;
@@ -55,4 +55,25 @@ public class ProjectDTO {
     private ProjectType projectType;
     private WorkingConditions workingConditions;
 
+//    public ProjectDTO(String project_name, String customer, String proj_stage, boolean gost_doc, String end_terms, LocalDateTime created, LocalDateTime updated, String func_direction, String subject_area, String description, String problem_to_solve, String projectAuthor, String technology, int stakeholder_number, boolean active, boolean draft, TeamInfo teamInfo, ProjectType projectType, WorkingConditions workingConditions) {
+//        this.project_name = project_name;
+//        this.customer = customer;
+//        this.proj_stage = proj_stage;
+//        this.gost_doc = gost_doc;
+//        this.end_terms = end_terms;
+//        this.created = created;
+//        this.updated = updated;
+//        this.func_direction = func_direction;
+//        this.subject_area = subject_area;
+//        this.description = description;
+//        this.problem_to_solve = problem_to_solve;
+//        this.projectAuthor = projectAuthor;
+//        this.technology = technology;
+//        this.stakeholder_number = stakeholder_number;
+//        this.active = active;
+//        this.draft = draft;
+//        this.teamInfo = teamInfo;
+//        this.projectType = projectType;
+//        this.workingConditions = workingConditions;
+//    }
 }

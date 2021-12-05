@@ -44,7 +44,7 @@ public class AllProjectsInfoController {
     ModelMapper modelMapper;
 
     //выводим все проекты с основными полями активные и не черновики
-    @PreAuthorize("hasAnyRole('PM', 'HR')")
+//    @PreAuthorize("hasAnyRole('PM', 'HR')")
     @GetMapping(value = "activeprojects",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTO(){
         return projectService.showAllProjectInfo();
@@ -74,9 +74,9 @@ public class AllProjectsInfoController {
 
     //фильтрация с использованием FilterCriteria и Specification
     @PreAuthorize("hasAnyRole('PM', 'HR')")
-    @GetMapping(value = "activeprojects/filter/some",  produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "activeprojects/filter",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTOFilterBy(@RequestBody ProjectInfoPageDTO projectInfoPageDTO){
-        return projectService.convertFiltredByCriteria(projectInfoPageDTO.getProjectAuthor(), projectInfoPageDTO.isActive(), projectInfoPageDTO.getCustomer());
+        return projectService.convertFiltredByCriteria(projectInfoPageDTO.getProjectAuthor(), projectInfoPageDTO.getProj_stage(), projectInfoPageDTO.getCustomer());
     }
 }
    // @RequestParam(required = false) String projectAuthor, @RequestParam(required = false) String customer
