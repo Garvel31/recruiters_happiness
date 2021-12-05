@@ -3,6 +3,7 @@ package ru.ibs.recruiters_happiness.services;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import ru.ibs.recruiters_happiness.configuration.MapperUtil;
 import ru.ibs.recruiters_happiness.entities.*;
@@ -10,6 +11,12 @@ import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectInfoPageDTO;
 import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.services.interfaces.ProjectService;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,23 +33,21 @@ public class ProjectServiceImpl implements ProjectService {
     ModelMapper modelMapper;
 
 
-
     @Override
     public Project addProject(ProjectDTO projectDTO) {
 
         final Project newProject = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
 
-        newProject.getTeamInfo().setProject(newProject);
+//        newProject.getTeamInfo().setProject(newProject);
         newProject.getTeamInfo().setAllTeamNumber(newProject.getTeamInfo().getAnaliticsNumber() + newProject.getTeamInfo().getBackNumber()
                 + newProject.getTeamInfo().getDevsNumber() + newProject.getTeamInfo().getDesignerNumber() + newProject.getTeamInfo().getFrontNumber()
-                + newProject.getTeamInfo().getFullstackNumber() );
-        newProject.getProjectType().setProject(newProject);
-        newProject.getWorkingConditions().setProject(newProject);
+                + newProject.getTeamInfo().getFullstackNumber());
+//        newProject.getProjectType().setProject(newProject);
+//        newProject.getWorkingConditions().setProject(newProject);
         newProject.setActive(true);
 
         return projectRepository.save(newProject);
     }
-
 
 
     //обновление проекта
@@ -118,21 +123,21 @@ public class ProjectServiceImpl implements ProjectService {
         return projectRepository.findAllByActiveIsTrue(Sort.by(Sort.Direction.ASC, sortType));
     }
 
+//Неиспользуемый фильтр:
+//    //фильтруем все карточи в сокращенном формате по полю customer
+//    public List<ProjectInfoPageDTO> showAllProjectInfoFilteredByCustomer(String customer) {
+//        return MapperUtil.convertList(FilterByCustomer(customer), this::entityToAllProjDtoConv);
+//    }
 
-    //фильтруем все карточи в сокращенном формате по полю customer
-    public List<ProjectInfoPageDTO> showAllProjectInfoFilteredByCustomer(String customer) {
-        return MapperUtil.convertList(FilterByCustomer(customer), this::entityToAllProjDtoConv);
-    }
 
+//    public Project FindDraft() {
+//        return projectRepository.findProjectByDraftIsTrue();
+//    }
 
-    public Project FindDraft() {
-        return projectRepository.findProjectByDraftIsTrue();
-    }
-
-    //метод для фильтра по customer
-    public List<Project> FilterByCustomer(String customer) {
-        return projectRepository.findAllByCustomer(customer);
-    }
+//    //метод для фильтра по customer
+//    public List<Project> FilterByCustomer(String customer) {
+//        return projectRepository.findAllByCustomer(customer);
+//    }
 
 
     //метод для мапинга
@@ -144,5 +149,32 @@ public class ProjectServiceImpl implements ProjectService {
     private ProjectInfoPageDTO entityToAllProjDtoConv(Project project) {
         return modelMapper.map(project, ProjectInfoPageDTO.class);
     }
+
+    //фильтруем все карточи в сокращенном формате по полю customer, author, active
+    public List<ProjectInfoPageDTO> convertFiltredByCriteria(String projectAuthor, Boolean active, String customer) {
+        return MapperUtil.convertList(findByCriteria(projectAuthor, active, customer), this::entityToAllProjDtoConv);
+    }
+
+
+    //Метод для фильтрации с использованием Specification
+    public List<Project> findByCriteria(String projectAuthor, boolean active, String customer) {
+        return projectRepository.findAll(new Specification<Project>() {
+            @Override
+            public Predicate toPredicate(Root<Project> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicates = new ArrayList<>();
+                if (projectAuthor != null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("projectAuthor"), projectAuthor)));
+                }
+
+                predicates.add(criteriaBuilder.and(criteriaBuilder.equal(root.get("active"), active)));
+
+                if (customer != null) {
+                    predicates.add(criteriaBuilder.and(criteriaBuilder.like(root.get("customer"), customer)));
+                }
+                return criteriaBuilder.and(predicates.toArray(new Predicate[predicates.size()]));
+            }
+        });
+    }
+
 
 }
