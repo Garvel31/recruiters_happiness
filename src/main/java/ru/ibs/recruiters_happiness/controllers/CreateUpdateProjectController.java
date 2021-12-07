@@ -108,6 +108,7 @@ public class CreateUpdateProjectController {
         return technologyService.dictLinkedList();
     }
 
+
 //    private ProjectDTO entityToDtoConv(Project project) {
 //        return modelMapper.map(project, ProjectDTO.class);
 //    }
