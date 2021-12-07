@@ -73,7 +73,7 @@ public class AllProjectsInfoController {
     }
 
     //фильтрация с использованием FilterCriteria и Specification
-    @PreAuthorize("hasAnyRole('PM', 'HR')")
+   // @PreAuthorize("hasAnyRole('PM', 'HR')")
     @GetMapping(value = "activeprojects/filter",  produces = MediaType.APPLICATION_JSON_VALUE)
     public List<ProjectInfoPageDTO> showProjectDTOFilterBy(@RequestBody ProjectInfoPageDTO projectInfoPageDTO){
         return projectService.convertFiltredByCriteria(projectInfoPageDTO.getProjectAuthor(), projectInfoPageDTO.getProj_stage(), projectInfoPageDTO.getCustomer());

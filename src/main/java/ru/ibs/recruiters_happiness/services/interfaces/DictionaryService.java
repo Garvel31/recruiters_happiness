@@ -6,9 +6,8 @@ import java.util.List;
 
 public interface DictionaryService {
 
-     void parseToDict(String tech);
-    // List<Technology> dictLinkedList();
-     //List<String> dictLinkedList();
+    void parseToDict(String s);
 
+    List<String> dictLinkedList();
 
 }

@@ -50,7 +50,6 @@ public class CreateUpdateProjectController {
     public Object showProject(@PathVariable(name = "id", required = true) Long id) {
 
         return projectService.showProjectById(id);
-
     }
 
     //Получить все проекты
