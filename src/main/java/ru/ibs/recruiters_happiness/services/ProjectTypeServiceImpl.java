@@ -7,6 +7,7 @@ import ru.ibs.recruiters_happiness.configuration.MapperUtil;
 import ru.ibs.recruiters_happiness.entities.Project;
 import ru.ibs.recruiters_happiness.entities.ProjectType;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
+import ru.ibs.recruiters_happiness.repositories.ProjectRepository;
 import ru.ibs.recruiters_happiness.repositories.ProjectTypeRepository;
 import ru.ibs.recruiters_happiness.services.interfaces.ProjectTypeService;
 
@@ -15,6 +16,9 @@ public class ProjectTypeServiceImpl implements ProjectTypeService {
 
     @Autowired
     ProjectTypeRepository projectTypeRepository;
+
+    @Autowired
+    ProjectRepository projectRepository;
 
     @Autowired
     ModelMapper modelMapper;
@@ -29,7 +33,8 @@ public class ProjectTypeServiceImpl implements ProjectTypeService {
 
 public ProjectType updateProjectType(Long projectid, ProjectDTO projectDTO) {
             Project project = MapperUtil.DtoToEntityConv(projectDTO, modelMapper);
-            ProjectType projectType = projectTypeRepository.findProjectTypeByProjectId(projectid);
+    //        ProjectType projectType = projectTypeRepository.findProjectTypeByProjectId(projectid);
+            ProjectType projectType = projectTypeRepository.findProjectTypeById(projectRepository.findProjectById(projectid).getProjectType().getId());
             projectType.setPayType(project.getProjectType().isPayType());
             projectType.setPO(project.getProjectType().isPO());
             projectType.setMVP(project.getProjectType().isMVP());

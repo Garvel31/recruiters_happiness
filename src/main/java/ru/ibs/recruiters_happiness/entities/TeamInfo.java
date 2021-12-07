@@ -26,10 +26,10 @@ public class TeamInfo {
     private int analiticsNumber, devsNumber, testerNumber, techpisNumber, designerNumber, frontNumber, backNumber, fullstackNumber;
     private int allTeamNumber;
 
-    @OneToOne
-    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
-    @JsonIgnore
-    private Project project;
+//    @OneToOne
+//    @JoinColumn(name = "PROJECT_ID", referencedColumnName = "ID")
+//    @JsonIgnore
+//    private Project project;
 
     public TeamInfo(String devMetodology, boolean ProductDev, boolean TeamFormed, int analiticsNumber, int devsNumber, int testerNumber,
                     int techpisNumber, int designerNumber, int frontNumber, int backNumber, int fullstackNumber) {

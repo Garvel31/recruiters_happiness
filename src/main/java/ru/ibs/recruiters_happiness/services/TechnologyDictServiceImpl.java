@@ -32,13 +32,15 @@ public class TechnologyDictServiceImpl implements DictionaryService {
     }
 
     public void parseToDict(String tech) {
-        List<String> techs = List.of(tech.split(", "));
-        techs.forEach(s -> {
-            try {
-                technologyRepository.save(new Technology(s));
-            } catch (Exception ignored) {
-            }
-        });
+        if (tech != null) {
+            List<String> techs = List.of(tech.split(", "));
+            techs.forEach(s -> {
+                try {
+                    technologyRepository.save(new Technology(s));
+                } catch (Exception ignored) {
+                }
+            });
+        }
     }
 
 
@@ -74,5 +76,4 @@ public class TechnologyDictServiceImpl implements DictionaryService {
 //
 //    return mapper.map(technologyRepository.findAll(), TechnologyDTO.class);
 //    }
-
 }

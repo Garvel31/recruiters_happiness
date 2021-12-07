@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import ru.ibs.recruiters_happiness.entities.Project;
 import ru.ibs.recruiters_happiness.entities.dto.ProjectDTO;
@@ -45,7 +46,7 @@ public class CreateUpdateProjectController {
     ModelMapper modelMapper;
 
     //Получить проект
-    @GetMapping(value = "projects/{id}", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "projects/card/{id}", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object showProjects(@PathVariable(name = "id", required = true) Long id) {
         if (id != null) {
             return projectService.showProjectById(id);
@@ -56,6 +57,7 @@ public class CreateUpdateProjectController {
 
 
     //Создать проект
+    @PreAuthorize("hasRole('PM')")
     @PostMapping(value = "projects", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object addProject(@RequestBody(required = false) @Valid ProjectDTO projectDTO) {
 
@@ -64,6 +66,7 @@ public class CreateUpdateProjectController {
     }
 
     //Обновить проект
+    @PreAuthorize("hasRole('PM')")
     @PutMapping(value = "projects/{id}", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public void updateProject(@PathVariable(name = "id", required = true) Long id, @RequestBody(required = false) @Valid ProjectDTO projectDTO) {
 
@@ -75,24 +78,28 @@ public class CreateUpdateProjectController {
     }
 
     //Удалить проект
+    @PreAuthorize("hasRole('PM')")
     @DeleteMapping(value = "projects/{id}")
     public void deleteProject(@PathVariable(name = "id", required = true) Long id) {
         projectService.deleteProject(id);
     }
 
     //Отправить в архив
+    @PreAuthorize("hasAnyRole('PM', 'HR')")
     @PostMapping(value = "projects/archive/{id}")
     public void moveProjectToArchive(@PathVariable(name = "id", required = true) Long id) {
         projectService.moveProjectToArchive(id);
     }
 
     //Перенести из архива в активные
+    @PreAuthorize("hasRole('PM')")
     @PostMapping(value = "projects/unzip/{id}")
     public void moveProjectFromArchive(@PathVariable(name = "id", required = true) Long id) {
         projectService.moveProjectFromArchive(id);
     }
 
-    //Получить проект
+    //Получить справочник технологий
+    @PreAuthorize("hasRole('PM')")
     @GetMapping(value = "projects", consumes = {MediaType.ALL_VALUE}, produces = MediaType.APPLICATION_JSON_VALUE)
     public Object showTech() {
         return technologyService.dictLinkedList();
