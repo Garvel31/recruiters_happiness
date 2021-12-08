@@ -7,9 +7,9 @@ stages:
     - deploy openshift
  
 variables:
-    PROJECT_NAME: group03-back
+    PROJECT_NAME: group09-back
     DOCKER_REPO: docker.trainee.ru.com
-    HELM_REPO: helm-group3-back
+    HELM_REPO: helm-group9-back
     HELM_REPO_URL: https://repo.trainee.ru.com/repository/helm
     HELM_EXPERIMENTAL_OCI: 1
 
