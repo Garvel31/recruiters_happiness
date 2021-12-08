@@ -1,0 +1,604 @@
+databaseChangeLog:
+  - logicalFilePath: db/changelog/db.changelog-RH.yaml
+#  - changeSet:
+#      id:  dropTable-project
+#      author:  Pobeda
+#      changes:
+#        - delete:
+#            tableName:  project
+  - changeSet:
+      id: 1
+      author: Pobeda
+      changes:
+        - createTable:
+            tableName: project
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: active
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created
+                  type: timestamp
+              - column:
+                  name: customer
+                  type: varchar(50)
+              - column:
+                  name: description
+                  type: varchar(50)
+              - column:
+                  name: draft
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: end_terms
+                  type: varchar(50)
+              - column:
+                  name: func_direction
+                  type: varchar(255)
+              - column:
+                  name: gost_doc
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: problem_to_solve
+                  type: varchar(255)
+              - column:
+                  name: proj_stage
+                  type: varchar(50)
+              - column:
+                  name: projectauthor
+                  type: varchar(50)
+              - column:
+                  name: project_name
+                  type: varchar(50)
+              - column:
+                  name: stakeholder_number
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subject_area
+                  type: varchar(255)
+              - column:
+                  name: technology
+                  type: varchar(255)
+              - column:
+                  name: updated
+                  type: timestamp
+
+  - changeSet:
+      id: 2
+      author: Pobeda
+      changes:
+        - createTable:
+            tableName: projecttype
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: isfromscratch
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ismvp
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ispo
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ispaytype
+                  type: boolean
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 3
+      author: Pobeda
+      changes:
+        - createTable:
+            tableName: teaminfo
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: productdev
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: teamformed
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: allteamnumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: analiticsnumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: backnumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: designernumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: devmetodology
+                  type: varchar(50)
+              - column:
+                  name: devsnumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: frontnumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fullstacknumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: techpisnumber
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: testernumber
+                  type: integer
+                  constraints:
+                    nullable: false
+
+  - changeSet:
+      id: 4
+      author: Pobeda
+      changes:
+        - createTable:
+            tableName: workingconditions
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: adress
+                  type: varchar(50)
+              - column:
+                  name: isinoffice
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isovertimeexpect
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: istimelag
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: procedure
+                  type: varchar(50)
+              - column:
+                  name: schedule
+                  type: varchar(50)
+
+  - changeSet:
+      id: 5
+      author: Pobeda
+      changes:
+        - addColumn:
+            tableName: project
+            columns:
+              - column:
+                  name: projecttype_id
+                  type: integer
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: project
+            baseColumnNames: projecttype_id
+            referencedTableName: projecttype
+            referencedColumnNames: id
+            constraintName: project_projecttype_fk
+
+  - changeSet:
+      id: 6
+      author: Pobeda
+      changes:
+        - addColumn:
+            tableName: project
+            columns:
+              - column:
+                  name: teaminfo_id
+                  type: integer
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: project
+            baseColumnNames: teaminfo_id
+            referencedTableName: teaminfo
+            referencedColumnNames: id
+            constraintName: project_teaminfo_fk
+
+  - changeSet:
+      id: 7
+      author: Pobeda
+      changes:
+        - addColumn:
+            tableName: project
+            columns:
+              - column:
+                  name: workingconditions_id
+                  type: integer
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            baseTableName: project
+            baseColumnNames: workingconditions_id
+            referencedTableName: workingconditions
+            referencedColumnNames: id
+            constraintName: project_workingconditions_fk
+
+  - changeSet:
+      id: 8
+      author: Pobeda
+      changes:
+        - createTable:
+            tableName: user_tbl
+            columns:
+              - column:
+                  name: uid
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: isaccountnonexpired
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isaccountnonlocked
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: iscredentialsnonexpired
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isenabled
+                  type: boolean
+                  constraints:
+                    nullable: false
+              - column:
+                  name: password
+                  type: varchar(50)
+              - column:
+                  name: role
+                  type: varchar(50)
+              - column:
+                  name: username
+                  type: varchar(50)
+
+  - changeSet:
+      id: 9
+      author: Pobeda
+      changes:
+        - createTable:
+            tableName: technology
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: tech
+                  type: varchar(50)
+                  constraints:
+                    unique : true
+
+  - changeSet:
+      id: 10
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: projecttype
+            columns:
+              - column:
+                  name: id
+                  value: -1
+              - column:
+                  name: isfromscratch
+                  value: true
+              - column:
+                  name: ismvp
+                  value: true
+              - column:
+                  name: ispo
+                  value: true
+              - column:
+                  name: ispaytype
+                  value: true
+
+  - changeSet:
+      id: 11
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: teaminfo
+            columns:
+              - column:
+                  name: id
+                  value: -1
+              - column:
+                  name: productdev
+                  value: true
+              - column:
+                  name: teamformed
+                  value: true
+              - column:
+                  name: allteamnumber
+                  value: 9
+              - column:
+                  name: analiticsnumber
+                  value: 3
+              - column:
+                  name: backnumber
+                  value: 3
+              - column:
+                  name: designernumber
+                  value: 3
+              - column:
+                  name: devmetodology
+                  value: "Agile"
+              - column:
+                  name: devsnumber
+                  value: 0
+              - column:
+                  name: frontnumber
+                  value: 0
+              - column:
+                  name: fullstacknumber
+                  value: 0
+              - column:
+                  name: techpisnumber
+                  value: 0
+              - column:
+                  name: testernumber
+                  value: 0
+
+  - changeSet:
+      id: 12
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: workingconditions
+            columns:
+              - column:
+                  name: id
+                  value: -1
+              - column:
+                  name: adress
+                  value: "Есенина 20"
+              - column:
+                  name: isinoffice
+                  value: true
+              - column:
+                  name: isovertimeexpect
+                  value: true
+              - column:
+                  name: istimelag
+                  value: true
+              - column:
+                  name: procedure
+                  value: "процедура приема"
+              - column:
+                  name: schedule
+                  value: "график"
+
+  - changeSet:
+      id: 13
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: project
+            columns:
+              - column:
+                  name: id
+                  value: -1
+              - column:
+                  name: active
+                  value: true
+              - column:
+                  name: customer
+                  value: "ГПН"
+              - column:
+                  name: description
+                  value: "Проект для ГПН"
+              - column:
+                  name: draft
+                  value: false
+              - column:
+                  name: end_terms
+                  value: "16-06-2034"
+              - column:
+                  name: func_direction
+                  value: "направление разработки и добычи природных ископаемых"
+              - column:
+                  name: gost_doc
+                  value: true
+              - column:
+                  name: problem_to_solve
+                  value: "разработка информационной системы"
+              - column:
+                  name: proj_stage
+                  value: "Середина"
+              - column:
+                  name: projectauthor
+                  value: "Победа"
+              - column:
+                  name: project_name
+                  value: "ГПН-ИС"
+              - column:
+                  name: stakeholder_number
+                  value: 3
+              - column:
+                  name: subject_area
+                  value: "Добывающие отрасли"
+              - column:
+                  name: technology
+                  value: "Spring, java"
+              - column:
+                  name: projecttype_id
+                  value: -1
+              - column:
+                  name: teaminfo_id
+                  value: -1
+              - column:
+                  name: workingconditions_id
+                  value: -1
+  - changeSet:
+      id: 14
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: user_tbl
+            columns:
+              - column:
+                  name: isaccountnonexpired
+                  value: true
+              - column:
+                  name: isaccountnonlocked
+                  value: true
+              - column:
+                  name: iscredentialsnonexpired
+                  value: true
+              - column:
+                  name: isenabled
+                  value: true
+              - column:
+                  name: password
+                  value: "12345"
+              - column:
+                  name: role
+                  value: "PM"
+              - column:
+                  name: username
+                  value: "ProductManager"
+  - changeSet:
+      id: 15
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: user_tbl
+            columns:
+              - column:
+                  name: isaccountnonexpired
+                  value: true
+              - column:
+                  name: isaccountnonlocked
+                  value: true
+              - column:
+                  name: iscredentialsnonexpired
+                  value: true
+              - column:
+                  name: isenabled
+                  value: true
+              - column:
+                  name: password
+                  value: "12345"
+              - column:
+                  name: role
+                  value: "HR"
+              - column:
+                  name: username
+                  value: "HeadRecruiter"
+  - changeSet:
+      id: 16
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: user_tbl
+            columns:
+              - column:
+                  name: isaccountnonexpired
+                  value: true
+              - column:
+                  name: isaccountnonlocked
+                  value: true
+              - column:
+                  name: iscredentialsnonexpired
+                  value: true
+              - column:
+                  name: isenabled
+                  value: true
+              - column:
+                  name: password
+                  value: "12345"
+              - column:
+                  name: role
+                  value: "DM"
+              - column:
+                  name: username
+                  value: "DevManager"
+  - changeSet:
+      id: 17
+      author: Pobeda
+      changes:
+        - insert:
+            tableName: technology
+            columns:
+              - column:
+                    name: id
+                    value: -1
+              - column:
+                  name: tech
+                  value: "Spring"

@@ -43,6 +43,7 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
 //                .antMatchers(HttpMethod.GET, "/hrdream/projects/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/hrdream/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/hrdream/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
